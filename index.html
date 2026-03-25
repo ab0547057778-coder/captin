@@ -54,7 +54,7 @@
 
     .section-title {
       font-size: 28px;
-      color: #0b4f6c;
+      color: #327896;
       margin-bottom: 18px;
       text-align: center;
     }
@@ -487,120 +487,165 @@
     جميع الحقوق محفوظة © Programmer Abdullah
   </footer>
 
-  <script>
-    const bookingForm = document.getElementById("bookingForm");
-    const successMsg = document.getElementById("successMsg");
-    const tripType = document.getElementById("tripType");
-    const duration = document.getElementById("duration");
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    tripType.addEventListener("change", function () {
-      const value = this.value;
-      duration.innerHTML = '<option value="">اختر المدة</option>';
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIrEMz-cTVb4ZFARdA7NQywWEbJ9ZrjE",
+    authDomain: "captain-site-16f2d.firebaseapp.com",
+    projectId: "captain-site-16f2d",
+    storageBucket: "captain-site-16f2d.firebasestorage.app",
+    messagingSenderId: "950382729411",
+    appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
+    measurementId: "G-4K0RXH2W61"
+  };
 
-      if (value === "نزهة") {
-        duration.innerHTML += '<option value="ساعة">ساعة</option>';
-        duration.innerHTML += '<option value="ساعتين">ساعتين</option>';
-      } else if (value === "صيد") {
-        duration.innerHTML += '<option value="3 ساعات">3 ساعات</option>';
-        duration.innerHTML += '<option value="5 ساعات">5 ساعات</option>';
-      }
-    });
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    bookingForm.addEventListener("submit", function(e) {
-      e.preventDefault();
+  const bookingForm = document.getElementById("bookingForm");
+  const successMsg = document.getElementById("successMsg");
+  const tripType = document.getElementById("tripType");
+  const duration = document.getElementById("duration");
 
-      const bookings = JSON.parse(localStorage.getItem("captainBookings")) || [];
+  tripType.addEventListener("change", function () {
+    const value = this.value;
+    duration.innerHTML = '<option value="">اختر المدة</option>';
 
-      const newBooking = {
-        id: Date.now(),
-        name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        tripType: document.getElementById("tripType").value,
-        duration: document.getElementById("duration").value,
-        date: document.getElementById("date").value,
-        time: document.getElementById("time").value,
-        notes: document.getElementById("notes").value.trim(),
-        status: "جديد"
-      };
+    if (value === "نزهة") {
+      duration.innerHTML += '<option value="ساعة">ساعة</option>';
+      duration.innerHTML += '<option value="ساعتين">ساعتين</option>';
+    } else if (value === "صيد") {
+      duration.innerHTML += '<option value="3 ساعات">3 ساعات</option>';
+      duration.innerHTML += '<option value="5 ساعات">5 ساعات</option>';
+    }
+  });
 
-      bookings.push(newBooking);
-      localStorage.setItem("captainBookings", JSON.stringify(bookings));
+  bookingForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
+    const newBooking = {
+      name: document.getElementById("name").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      tripType: document.getElementById("tripType").value,
+      duration: document.getElementById("duration").value,
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      notes: document.getElementById("notes").value.trim(),
+      status: "جديد",
+      points: 0,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, "bookings"), newBooking);
       successMsg.style.display = "block";
+      successMsg.textContent = "✅ تم إرسال الحجز بنجاح";
       bookingForm.reset();
       duration.innerHTML = '<option value="">اختر المدة</option>';
-    });
+    } catch (error) {
+      console.error(error);
+      successMsg.style.display = "block";
+      successMsg.textContent = "❌ حدث خطأ أثناء إرسال الحجز";
+    }
+  });
 
-    function toggleChat() {
-      const chat = document.getElementById("chatWidget");
-      chat.style.display = chat.style.display === "block" ? "none" : "block";
+  window.checkCustomerPoints = async function () {
+    const phone = document.getElementById("loyaltyPhone").value.trim();
+    const loyaltyResult = document.getElementById("loyaltyResult");
+
+    if (!phone) {
+      loyaltyResult.style.display = "block";
+      loyaltyResult.innerHTML = "⚠️ فضلاً أدخل رقم الجوال أولاً";
+      return;
     }
 
-    function addMessage(text, sender) {
-      const chatBox = document.getElementById("chatBox");
-      const message = document.createElement("div");
-      message.className = `msg ${sender}`;
-      message.textContent = text;
-      chatBox.appendChild(message);
-      chatBox.scrollTop = chatBox.scrollHeight;
+    try {
+      const snapshot = await getDocs(collection(db, "bookings"));
+      let points = 0;
+
+      snapshot.forEach((doc) => {
+        const booking = doc.data();
+        if (booking.phone === phone) {
+          points += booking.points || 0;
+        }
+      });
+
+      loyaltyResult.style.display = "block";
+
+      if (points >= 3) {
+        loyaltyResult.innerHTML = `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`;
+      } else if (points > 0) {
+        loyaltyResult.innerHTML = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
+      } else {
+        loyaltyResult.innerHTML = "لا توجد نقاط مسجلة لهذا الرقم حاليًا.";
+      }
+    } catch (error) {
+      console.error(error);
+      loyaltyResult.style.display = "block";
+      loyaltyResult.innerHTML = "❌ تعذر جلب النقاط حالياً";
+    }
+  };
+
+  function addMessage(text, sender) {
+    const chatBox = document.getElementById("chatBox");
+    const message = document.createElement("div");
+    message.className = `msg ${sender}`;
+    message.textContent = text;
+    chatBox.appendChild(message);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function getBotReply(message) {
+    const text = message.toLowerCase();
+
+    if (text.includes("هلا") || text.includes("مرحبا") || text.includes("السلام") || text.includes("اهلا")) {
+      return "ياهلا وسهلا، تقدر تسألني عن الأسعار أو الأوقات أو طريقة الحجز.";
+    }
+    if (text.includes("سعر") || text.includes("كم") || text.includes("الاسعار") || text.includes("بكم")) {
+      return "رحلات النزهة: ساعة بـ 300 ريال، وساعتين بـ 500 ريال. رحلات الصيد: 3 ساعات بـ 700 ريال، و5 ساعات بـ 1000 ريال.";
+    }
+    if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
+      return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
+    }
+    if (text.includes("حجز") || text.includes("احجز") || text.includes("موعد")) {
+      return "تقدر تحجز مباشرة من نموذج الحجز الموجود في الصفحة.";
+    }
+    if (text.includes("موقع") || text.includes("وين") || text.includes("الموقع")) {
+      return "نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل معك.";
     }
 
-    function getBotReply(message) {
-      const text = message.toLowerCase();
+    return "أقدر أساعدك في الأسعار، الأوقات، نوع الرحلات، أو طريقة الحجز.";
+  }
 
-      if (text.includes("هلا") || text.includes("مرحبا") || text.includes("السلام") || text.includes("اهلا")) {
-        return "ياهلا وسهلا، حياك الله. تقدر تسألني عن الأسعار أو الأوقات أو طريقة الحجز.";
-      }
+  window.toggleChat = function () {
+    const chat = document.getElementById("chatWidget");
+    chat.style.display = chat.style.display === "block" ? "none" : "block";
+  };
 
-      if (text.includes("سعر") || text.includes("كم") || text.includes("الاسعار") || text.includes("بكم")) {
-        return "رحلات النزهة: ساعة بـ 300 ريال، وساعتين بـ 500 ريال. رحلات الصيد: 3 ساعات بـ 700 ريال، و5 ساعات بـ 1000 ريال.";
-      }
+  window.sendMessage = function () {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
 
-      if (text.includes("نزهة")) {
-        return "رحلات النزهة مناسبة للأجواء العائلية والأصدقاء، والأسعار تبدأ من 300 ريال.";
-      }
+    if (!text) return;
 
-      if (text.includes("صيد")) {
-        return "رحلات الصيد متوفرة بمدة 3 ساعات أو 5 ساعات، والأسعار تبدأ من 700 ريال.";
-      }
+    addMessage(text, "user");
 
-      if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
-        return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
-      }
+    setTimeout(() => {
+      addMessage(getBotReply(text), "bot");
+    }, 350);
 
-      if (text.includes("حجز") || text.includes("احجز") || text.includes("موعد")) {
-        return "تقدر تحجز مباشرة من النموذج الموجود في الصفحة، وسيصل الطلب للإدارة مباشرة.";
-      }
+    input.value = "";
+    input.focus();
+  };
 
-      if (text.includes("موقع") || text.includes("وين") || text.includes("الموقع")) {
-        return "نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل معك.";
-      }
-
-      return "أقدر أساعدك في الأسعار، الأوقات، نوع الرحلات، أو طريقة الحجز.";
+  document.getElementById("chatInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
     }
-
-    function sendMessage() {
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-
-      if (!text) return;
-
-      addMessage(text, "user");
-
-      setTimeout(() => {
-        addMessage(getBotReply(text), "bot");
-      }, 350);
-
-      input.value = "";
-      input.focus();
-    }
-
-    document.getElementById("chatInput").addEventListener("keypress", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
