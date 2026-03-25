@@ -296,10 +296,32 @@
     <div id="content"></div>
   </div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      updateDoc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIrEMz-cTVb4ZFARdA7NQywWEbJ9ZrjE",
+      authDomain: "captain-site-16f2d.firebaseapp.com",
+      projectId: "captain-site-16f2d",
+      storageBucket: "captain-site-16f2d.firebasestorage.app",
+      messagingSenderId: "950382729411",
+      appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
+      measurementId: "G-4K0RXH2W61"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
     const ADMIN_PASSWORD = "Musbeh11";
 
-    function checkPassword() {
+    window.checkPassword = function () {
       const input = document.getElementById("passwordInput").value;
       const errorMsg = document.getElementById("errorMsg");
 
@@ -310,39 +332,35 @@
       } else {
         errorMsg.style.display = "block";
       }
-    }
+    };
 
-    document.getElementById("passwordInput").addEventListener("keypress", function(e) {
+    document.getElementById("passwordInput").addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
         checkPassword();
       }
     });
 
-    function getBookings() {
-      return JSON.parse(localStorage.getItem("captainBookings")) || [];
+    async function getBookings() {
+      const snapshot = await getDocs(collection(db, "bookings"));
+      return snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
     }
 
-    function saveBookings(bookings) {
-      localStorage.setItem("captainBookings", JSON.stringify(bookings));
-    }
-
-    function getCustomerPoints(phone) {
-      const allBookings = getBookings();
+    function getCustomerPoints(bookings, phone) {
       let points = 0;
-
-      allBookings.forEach(booking => {
+      bookings.forEach((booking) => {
         if (booking.phone === phone) {
           points += booking.points || 0;
         }
       });
-
       return points;
     }
 
-    function getRewardEligibleCustomers() {
-      const bookings = getBookings();
-      const phones = [...new Set(bookings.map(b => b.phone))];
-      return phones.filter(phone => getCustomerPoints(phone) >= 3).length;
+    function getRewardEligibleCustomers(bookings) {
+      const phones = [...new Set(bookings.map((b) => b.phone))];
+      return phones.filter((phone) => getCustomerPoints(bookings, phone) >= 3).length;
     }
 
     function statusClass(status) {
@@ -352,72 +370,76 @@
       return "new";
     }
 
-    function updateStatus(id, newStatus) {
-      const bookings = getBookings().map(booking => {
-        if (booking.id === id) {
-          if (booking.status !== "مكتمل" && newStatus === "مكتمل") {
-            booking.points = (booking.points || 0) + 1;
-          }
-          booking.status = newStatus;
-        }
-        return booking;
+    async function updateStatus(id, newStatus) {
+      const bookings = await getBookings();
+      const booking = bookings.find((b) => b.id === id);
+
+      if (!booking) return;
+
+      let newPoints = booking.points || 0;
+
+      if (booking.status !== "مكتمل" && newStatus === "مكتمل") {
+        newPoints += 1;
+      }
+
+      await updateDoc(doc(db, "bookings", id), {
+        status: newStatus,
+        points: newPoints
       });
 
-      saveBookings(bookings);
       renderBookings();
     }
 
-    function useReward(phone) {
-      const currentPoints = getCustomerPoints(phone);
+    async function useReward(phone) {
+      const bookings = await getBookings();
+      const currentPoints = getCustomerPoints(bookings, phone);
 
       if (currentPoints < 3) {
         alert("❌ هذا العميل ما عنده نقاط كافية لاستخدام المكافأة");
         return;
       }
 
-      const bookings = getBookings();
-      let pointsToRemove = 3;
+      let remaining = 3;
 
-      for (let i = 0; i < bookings.length; i++) {
-        if (bookings[i].phone === phone && (bookings[i].points || 0) > 0) {
-          const currentBookingPoints = bookings[i].points || 0;
+      for (const booking of bookings) {
+        if (booking.phone === phone && (booking.points || 0) > 0 && remaining > 0) {
+          const current = booking.points || 0;
+          const updated = current <= remaining ? 0 : current - remaining;
+          remaining -= Math.min(current, remaining);
 
-          if (currentBookingPoints <= pointsToRemove) {
-            pointsToRemove -= currentBookingPoints;
-            bookings[i].points = 0;
-          } else {
-            bookings[i].points = currentBookingPoints - pointsToRemove;
-            pointsToRemove = 0;
-          }
+          await updateDoc(doc(db, "bookings", booking.id), {
+            points: updated
+          });
         }
-
-        if (pointsToRemove === 0) break;
       }
 
-      saveBookings(bookings);
-      renderBookings();
-      alert("✅ تم استخدام الرحلة المجانية وخصم 3 نقاط من العميل");
-    }
-
-    function deleteBooking(id) {
-      const bookings = getBookings().filter(booking => booking.id !== id);
-      saveBookings(bookings);
+      alert("✅ تم استخدام الرحلة المجانية");
       renderBookings();
     }
 
-    function clearBookings() {
+    async function deleteBooking(id) {
+      await deleteDoc(doc(db, "bookings", id));
+      renderBookings();
+    }
+
+    async function clearBookings() {
       const confirmDelete = confirm("هل أنت متأكد من حذف جميع الحجوزات؟");
       if (!confirmDelete) return;
 
-      localStorage.removeItem("captainBookings");
+      const bookings = await getBookings();
+
+      for (const booking of bookings) {
+        await deleteDoc(doc(db, "bookings", booking.id));
+      }
+
       renderBookings();
     }
 
     function updateStats(bookings) {
       const totalBookings = bookings.length;
-      const completedBookings = bookings.filter(b => b.status === "مكتمل").length;
+      const completedBookings = bookings.filter((b) => b.status === "مكتمل").length;
       const totalPoints = bookings.reduce((sum, b) => sum + (b.points || 0), 0);
-      const rewardClients = getRewardEligibleCustomers();
+      const rewardClients = getRewardEligibleCustomers(bookings);
 
       document.getElementById("totalBookings").textContent = totalBookings;
       document.getElementById("completedBookings").textContent = completedBookings;
@@ -425,19 +447,19 @@
       document.getElementById("rewardClients").textContent = rewardClients;
     }
 
-    function renderBookings() {
+    async function renderBookings() {
       const content = document.getElementById("content");
-      const bookings = getBookings().reverse();
+      const bookings = (await getBookings()).reverse();
 
-      updateStats(getBookings());
+      updateStats(bookings);
 
       if (bookings.length === 0) {
         content.innerHTML = '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
         return;
       }
 
-      let rows = bookings.map(booking => {
-        const customerPoints = getCustomerPoints(booking.phone);
+      let rows = bookings.map((booking) => {
+        const customerPoints = getCustomerPoints(bookings, booking.phone);
         const hasReward = customerPoints >= 3;
 
         return `
@@ -455,13 +477,13 @@
               ${hasReward ? '<span class="reward-badge">🎁 مستحق رحلة مجانية</span>' : '<span class="muted">غير مستحق بعد</span>'}
             </td>
             <td>
-              <button class="primary small-btn" onclick="updateStatus(${booking.id}, 'تم التأكيد')">تأكيد</button>
-              <button class="success small-btn" onclick="updateStatus(${booking.id}, 'مكتمل')">إكمال</button>
+              <button class="primary small-btn" onclick="updateStatus('${booking.id}', 'تم التأكيد')">تأكيد</button>
+              <button class="success small-btn" onclick="updateStatus('${booking.id}', 'مكتمل')">إكمال</button>
               ${hasReward
                 ? `<button class="warning small-btn" onclick="useReward('${booking.phone}')">استخدام المكافأة</button>`
                 : `<button class="warning small-btn disabled-btn" disabled>غير متاح</button>`
               }
-              <button class="danger small-btn" onclick="deleteBooking(${booking.id})">حذف</button>
+              <button class="danger small-btn" onclick="deleteBooking('${booking.id}')">حذف</button>
             </td>
           </tr>
         `;
@@ -492,6 +514,12 @@
         </div>
       `;
     }
+
+    window.renderBookings = renderBookings;
+    window.updateStatus = updateStatus;
+    window.useReward = useReward;
+    window.deleteBooking = deleteBooking;
+    window.clearBookings = clearBookings;
   </script>
 </body>
 </html>
