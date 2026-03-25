@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة حجوزات الكابتن أبو عبدالله</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      background: linear-gradient(180deg, #eef7fb 0%, #f8fcff 100%);
+      color: #123;
+      padding: 20px;
+    }
+
+    .login-box,
+    .header,
+    .stats-box,
+    .empty,
+    .table-wrap {
+      background: white;
+      border-radius: 22px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    }
+
+    .login-box {
+      max-width: 430px;
+      margin: 90px auto;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      color: #0b4f6c;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .login-box p {
+      color: #5a7481;
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d5e6ee;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .login-box input:focus {
+      border-color: #118ab2;
+      box-shadow: 0 0 0 4px rgba(17, 138, 178, 0.12);
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #118ab2, #0b6d90);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .error-msg {
+      color: #d9534f;
+      margin-top: 12px;
+      font-size: 14px;
+      display: none;
+    }
+
+    #dashboard {
+      display: none;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0b4f6c, #12739a);
+      color: white;
+      padding: 26px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin-bottom: 8px;
+      font-size: 30px;
+    }
+
+    .header p {
+      opacity: 0.95;
+      font-size: 15px;
+    }
+
+    .stats-box {
+      padding: 18px;
+      margin-bottom: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: #f7fbfd;
+      border: 1px solid #e2eef4;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .stat-card h3 {
+      color: #0b4f6c;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card strong {
+      font-size: 28px;
+      color: #123;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: #118ab2;
+      color: white;
+    }
+
+    .danger {
+      background: #d9534f;
+      color: white;
+    }
+
+    .success {
+      background: #28a745;
+      color: white;
+    }
+
+    .warning {
+      background: #f0ad4e;
+      color: white;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      padding: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1350px;
+    }
+
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid #e7eff4;
+      text-align: right;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: #eef7fb;
+      color: #0b4f6c;
+      position: sticky;
+      top: 0;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .new {
+      background: #fff3cd;
+      color: #8a6d3b;
+    }
+
+    .confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .done {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .reward-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      background: #ffe8a3;
+      color: #7a5600;
+    }
+
+    .small-btn {
+      padding: 8px 10px;
+      font-size: 13px;
+      margin-left: 6px;
+      margin-bottom: 6px;
+    }
+
+    .empty {
+      margin-top: 20px;
+      padding: 30px;
+      text-align: center;
+      color: #5c7380;
+      font-size: 16px;
+    }
+
+    .muted {
+      color: #6d8592;
+      font-size: 13px;
+    }
+
+    .disabled-btn {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box" id="loginBox">
+    <h2>🔐 دخول لوحة الإدارة</h2>
+    <p>ادخل كلمة المرور للوصول إلى حجوزات الكابتن أبو عبدالله</p>
+    <input type="password" id="passwordInput" placeholder="كلمة المرور">
+    <button onclick="checkPassword()">دخول</button>
+    <div class="error-msg" id="errorMsg">❌ كلمة المرور غير صحيحة</div>
+  </div>
+
+  <div id="dashboard">
+    <div class="header">
+      <h1>لوحة حجوزات الكابتن أبو عبدالله</h1>
+      <p>إدارة الحجوزات، متابعة العملاء، ونظام النقاط والمكافآت</p>
+    </div>
+
+    <div class="stats-box">
+      <div class="stat-card">
+        <h3>إجمالي الحجوزات</h3>
+        <strong id="totalBookings">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>الحجوزات المكتملة</h3>
+        <strong id="completedBookings">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>العملاء المستحقون لمكافأة</h3>
+        <strong id="rewardClients">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>إجمالي النقاط المجمعة</h3>
+        <strong id="totalPoints">0</strong>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" onclick="renderBookings()">تحديث الحجوزات</button>
+      <button class="danger" onclick="clearBookings()">حذف جميع الحجوزات</button>
+    </div>
+
+    <div id="content"></div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = "Musbeh11";
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (input === ADMIN_PASSWORD) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        renderBookings();
+      } else {
+        errorMsg.style.display = "block";
+      }
+    }
+
+    document.getElementById("passwordInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        checkPassword();
+      }
+    });
+
+    function getBookings() {
+      return JSON.parse(localStorage.getItem("captainBookings")) || [];
+    }
+
+    function saveBookings(bookings) {
+      localStorage.setItem("captainBookings", JSON.stringify(bookings));
+    }
+
+    function getCustomerPoints(phone) {
+      const allBookings = getBookings();
+      let points = 0;
+
+      allBookings.forEach(booking => {
+        if (booking.phone === phone) {
+          points += booking.points || 0;
+        }
+      });
+
+      return points;
+    }
+
+    function getRewardEligibleCustomers() {
+      const bookings = getBookings();
+      const phones = [...new Set(bookings.map(b => b.phone))];
+      return phones.filter(phone => getCustomerPoints(phone) >= 3).length;
+    }
+
+    function statusClass(status) {
+      if (status === "جديد") return "new";
+      if (status === "تم التأكيد") return "confirmed";
+      if (status === "مكتمل") return "done";
+      return "new";
+    }
+
+    function updateStatus(id, newStatus) {
+      const bookings = getBookings().map(booking => {
+        if (booking.id === id) {
+          if (booking.status !== "مكتمل" && newStatus === "مكتمل") {
+            booking.points = (booking.points || 0) + 1;
+          }
+          booking.status = newStatus;
+        }
+        return booking;
+      });
+
+      saveBookings(bookings);
+      renderBookings();
+    }
+
+    function useReward(phone) {
+      const currentPoints = getCustomerPoints(phone);
+
+      if (currentPoints < 3) {
+        alert("❌ هذا العميل ما عنده نقاط كافية لاستخدام المكافأة");
+        return;
+      }
+
+      const bookings = getBookings();
+      let pointsToRemove = 3;
+
+      for (let i = 0; i < bookings.length; i++) {
+        if (bookings[i].phone === phone && (bookings[i].points || 0) > 0) {
+          const currentBookingPoints = bookings[i].points || 0;
+
+          if (currentBookingPoints <= pointsToRemove) {
+            pointsToRemove -= currentBookingPoints;
+            bookings[i].points = 0;
+          } else {
+            bookings[i].points = currentBookingPoints - pointsToRemove;
+            pointsToRemove = 0;
+          }
+        }
+
+        if (pointsToRemove === 0) break;
+      }
+
+      saveBookings(bookings);
+      renderBookings();
+      alert("✅ تم استخدام الرحلة المجانية وخصم 3 نقاط من العميل");
+    }
+
+    function deleteBooking(id) {
+      const bookings = getBookings().filter(booking => booking.id !== id);
+      saveBookings(bookings);
+      renderBookings();
+    }
+
+    function clearBookings() {
+      const confirmDelete = confirm("هل أنت متأكد من حذف جميع الحجوزات؟");
+      if (!confirmDelete) return;
+
+      localStorage.removeItem("captainBookings");
+      renderBookings();
+    }
+
+    function updateStats(bookings) {
+      const totalBookings = bookings.length;
+      const completedBookings = bookings.filter(b => b.status === "مكتمل").length;
+      const totalPoints = bookings.reduce((sum, b) => sum + (b.points || 0), 0);
+      const rewardClients = getRewardEligibleCustomers();
+
+      document.getElementById("totalBookings").textContent = totalBookings;
+      document.getElementById("completedBookings").textContent = completedBookings;
+      document.getElementById("totalPoints").textContent = totalPoints;
+      document.getElementById("rewardClients").textContent = rewardClients;
+    }
+
+    function renderBookings() {
+      const content = document.getElementById("content");
+      const bookings = getBookings().reverse();
+
+      updateStats(getBookings());
+
+      if (bookings.length === 0) {
+        content.innerHTML = '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
+        return;
+      }
+
+      let rows = bookings.map(booking => {
+        const customerPoints = getCustomerPoints(booking.phone);
+        const hasReward = customerPoints >= 3;
+
+        return `
+          <tr>
+            <td>${booking.name}</td>
+            <td>${booking.phone}</td>
+            <td>${booking.tripType}</td>
+            <td>${booking.duration}</td>
+            <td>${booking.date}</td>
+            <td>${booking.time}</td>
+            <td>${booking.notes || "لا يوجد"}</td>
+            <td><span class="status ${statusClass(booking.status)}">${booking.status}</span></td>
+            <td>${customerPoints} نقطة</td>
+            <td>
+              ${hasReward ? '<span class="reward-badge">🎁 مستحق رحلة مجانية</span>' : '<span class="muted">غير مستحق بعد</span>'}
+            </td>
+            <td>
+              <button class="primary small-btn" onclick="updateStatus(${booking.id}, 'تم التأكيد')">تأكيد</button>
+              <button class="success small-btn" onclick="updateStatus(${booking.id}, 'مكتمل')">إكمال</button>
+              ${hasReward
+                ? `<button class="warning small-btn" onclick="useReward('${booking.phone}')">استخدام المكافأة</button>`
+                : `<button class="warning small-btn disabled-btn" disabled>غير متاح</button>`
+              }
+              <button class="danger small-btn" onclick="deleteBooking(${booking.id})">حذف</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      content.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>رقم الجوال</th>
+                <th>نوع الرحلة</th>
+                <th>المدة</th>
+                <th>التاريخ</th>
+                <th>الوقت</th>
+                <th>الملاحظات</th>
+                <th>الحالة</th>
+                <th>نقاط العميل</th>
+                <th>المكافأة</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
