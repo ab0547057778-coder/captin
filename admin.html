@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة حجوزات الكابتن شريف</title>
+  <title>لوحة إدارة الكابتن أبو عبدالله</title>
   <style>
     * {
       box-sizing: border-box;
@@ -19,10 +19,12 @@
     }
 
     .login-box,
+    .panel,
     .header,
-    .stats-box,
-    .empty,
-    .table-wrap {
+    .stats-grid,
+    .card,
+    .table-wrap,
+    .empty {
       background: white;
       border-radius: 22px;
       box-shadow: 0 12px 28px rgba(0,0,0,0.08);
@@ -57,21 +59,25 @@
       outline: none;
     }
 
-    .login-box input:focus {
-      border-color: #118ab2;
-      box-shadow: 0 0 0 4px rgba(17, 138, 178, 0.12);
+    .login-box button,
+    button {
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s ease;
     }
 
     .login-box button {
       width: 100%;
       padding: 14px;
-      border: none;
-      border-radius: 14px;
       background: linear-gradient(135deg, #118ab2, #0b6d90);
       color: white;
       font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
     }
 
     .error-msg {
@@ -89,7 +95,7 @@
       background: linear-gradient(135deg, #0b4f6c, #12739a);
       color: white;
       padding: 26px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .header h1 {
@@ -102,11 +108,11 @@
       font-size: 15px;
     }
 
-    .stats-box {
+    .stats-grid {
       padding: 18px;
       margin-bottom: 18px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 14px;
     }
 
@@ -119,13 +125,71 @@
 
     .stat-card h3 {
       color: #0b4f6c;
-      font-size: 15px;
+      font-size: 14px;
       margin-bottom: 8px;
     }
 
     .stat-card strong {
       font-size: 28px;
       color: #123;
+    }
+
+    .good {
+      color: #16753b !important;
+    }
+
+    .bad {
+      color: #b42318 !important;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .card h2 {
+      color: #0b4f6c;
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    .muted {
+      color: #6d8592;
+      font-size: 13px;
+    }
+
+    .finance-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .finance-form input,
+    .finance-form select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d5e6ee;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      background: #fbfdff;
+    }
+
+    .finance-form input:focus,
+    .finance-form select:focus {
+      border-color: #118ab2;
+      box-shadow: 0 0 0 4px rgba(17, 138, 178, 0.12);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .actions {
@@ -135,48 +199,51 @@
       margin-bottom: 18px;
     }
 
-    button {
-      border: none;
-      padding: 12px 18px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s ease;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
     .primary {
       background: #118ab2;
       color: white;
+      padding: 11px 16px;
     }
 
     .danger {
       background: #d9534f;
       color: white;
+      padding: 11px 16px;
     }
 
     .success {
       background: #28a745;
       color: white;
+      padding: 11px 16px;
     }
 
     .warning {
       background: #f0ad4e;
       color: white;
+      padding: 11px 16px;
+    }
+
+    .secondary {
+      background: #eef7fb;
+      color: #0b4f6c;
+      padding: 11px 16px;
+    }
+
+    .disabled-btn {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .table-wrap {
       overflow-x: auto;
       padding: 14px;
+      margin-bottom: 18px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1350px;
+      min-width: 1200px;
     }
 
     th, td {
@@ -227,6 +294,26 @@
       color: #7a5600;
     }
 
+    .pill-income {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eafaf0;
+      color: #16753b;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .pill-expense {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fdeaea;
+      color: #b42318;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
     .small-btn {
       padding: 8px 10px;
       font-size: 13px;
@@ -235,21 +322,26 @@
     }
 
     .empty {
-      margin-top: 20px;
       padding: 30px;
       text-align: center;
       color: #5c7380;
       font-size: 16px;
     }
 
-    .muted {
-      color: #6d8592;
-      font-size: 13px;
+    .notice {
+      margin-top: 10px;
+      background: #eef7fb;
+      border: 1px solid #d6eaf5;
+      color: #0b4f6c;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
     }
 
-    .disabled-btn {
-      opacity: 0.5;
-      cursor: not-allowed;
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -265,11 +357,11 @@
 
   <div id="dashboard">
     <div class="header">
-      <h1>لوحة حجوزات الكابتن أبو عبدالله</h1>
-      <p>إدارة الحجوزات، متابعة العملاء، ونظام النقاط والمكافآت</p>
+      <h1>لوحة إدارة الكابتن أبو عبدالله</h1>
+      <p>الحجوزات • النقاط • المدخول • المصروف • صافي الربح</p>
     </div>
 
-    <div class="stats-box">
+    <div class="stats-grid">
       <div class="stat-card">
         <h3>إجمالي الحجوزات</h3>
         <strong id="totalBookings">0</strong>
@@ -279,21 +371,101 @@
         <strong id="completedBookings">0</strong>
       </div>
       <div class="stat-card">
-        <h3>العملاء المستحقون لمكافأة</h3>
+        <h3>العملاء المستحقون للمكافأة</h3>
         <strong id="rewardClients">0</strong>
       </div>
       <div class="stat-card">
-        <h3>إجمالي النقاط المجمعة</h3>
+        <h3>إجمالي النقاط</h3>
         <strong id="totalPoints">0</strong>
+      </div>
+      <div class="stat-card">
+        <h3>إجمالي المدخول</h3>
+        <strong class="good" id="totalIncome">0 ريال</strong>
+      </div>
+      <div class="stat-card">
+        <h3>إجمالي المصروف</h3>
+        <strong class="bad" id="totalExpense">0 ريال</strong>
+      </div>
+      <div class="stat-card">
+        <h3>صافي الربح</h3>
+        <strong id="netProfit">0 ريال</strong>
       </div>
     </div>
 
-    <div class="actions">
-      <button class="primary" onclick="renderBookings()">تحديث الحجوزات</button>
-      <button class="danger" onclick="clearBookings()">حذف جميع الحجوزات</button>
+    <div class="layout">
+      <div class="card">
+        <h2>إدارة الأموال</h2>
+
+        <div class="finance-form">
+          <div class="row-2">
+            <select id="financeType">
+              <option value="income">إضافة مدخول</option>
+              <option value="expense">إضافة مصروف</option>
+            </select>
+
+            <input type="number" id="financeAmount" placeholder="المبلغ" min="1">
+          </div>
+
+          <input type="text" id="financeNote" placeholder="ملاحظة مثل: بنزين / صيانة / مبلغ إضافي">
+          <button class="primary" onclick="addFinanceEntry()">حفظ الحركة</button>
+        </div>
+
+        <div class="notice">
+          المدخول التلقائي ينحسب فقط من الحجوزات التي تغيّرت حالتها إلى <strong>مكتمل</strong>، حسب الأسعار التالية:
+          <br>جولة صغيرة: 100 ريال
+          <br>جولة كبيرة: 200 ريال
+          <br>نصف ساعة: 350 ريال
+          <br>ساعة: 600 ريال
+          <br>بكج الترفيه لمدة ساعة: 1000 ريال
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>إجراءات سريعة</h2>
+        <div class="actions">
+          <button class="primary" onclick="renderAll()">تحديث كل شيء</button>
+          <button class="secondary" onclick="refreshBookingsOnly()">تحديث الحجوزات فقط</button>
+          <button class="danger" onclick="clearAllBookings()">حذف جميع الحجوزات</button>
+          <button class="danger" onclick="clearAllFinance()">حذف جميع الحركات المالية</button>
+        </div>
+      </div>
     </div>
 
-    <div id="content"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الاسم</th>
+            <th>رقم الجوال</th>
+            <th>الرحلة</th>
+            <th>التاريخ</th>
+            <th>الوقت</th>
+            <th>الملاحظات</th>
+            <th>الحالة</th>
+            <th>نقاط العميل</th>
+            <th>المكافأة</th>
+            <th>مدخول الحجز</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsBody"></tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الحركة</th>
+            <th>المبلغ</th>
+            <th>الملاحظة</th>
+            <th>التاريخ</th>
+            <th>إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="financeBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <script type="module">
@@ -303,6 +475,7 @@
       collection,
       getDocs,
       doc,
+      addDoc,
       updateDoc,
       deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -317,9 +490,59 @@
       measurementId: "G-4K0RXH2W61"
     };
 
+    const ADMIN_PASSWORD = "Musbeh11";
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const ADMIN_PASSWORD = "Musbeh11";
+
+    function getTripPrice(tripType) {
+      const prices = {
+        "جولة صغيرة": 100,
+        "جولة كبيرة": 200,
+        "نصف ساعة": 350,
+        "ساعة": 600,
+        "بكج الترفيه لمدة ساعة": 1000
+      };
+      return prices[tripType] || 0;
+    }
+
+    async function getBookingsRaw() {
+      const snapshot = await getDocs(collection(db, "bookings"));
+      return snapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
+    }
+
+    async function getFinanceEntries() {
+      const snapshot = await getDocs(collection(db, "financeEntries"));
+      return snapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
+    }
+
+    function getCustomerPoints(bookings, phone) {
+      let points = 0;
+      bookings.forEach(booking => {
+        if (booking.phone === phone) {
+          points += booking.points || 0;
+        }
+      });
+      return points;
+    }
+
+    function getRewardEligibleCustomers(bookings) {
+      const phones = [...new Set(bookings.map(b => b.phone))];
+      return phones.filter(phone => getCustomerPoints(bookings, phone) >= 3).length;
+    }
+
+    function statusClass(status) {
+      if (status === "جديد") return "new";
+      if (status === "تم التأكيد") return "confirmed";
+      if (status === "مكتمل") return "done";
+      return "new";
+    }
 
     window.checkPassword = function () {
       const input = document.getElementById("passwordInput").value;
@@ -328,7 +551,7 @@
       if (input === ADMIN_PASSWORD) {
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("dashboard").style.display = "block";
-        renderBookings();
+        renderAll();
       } else {
         errorMsg.style.display = "block";
       }
@@ -340,58 +563,28 @@
       }
     });
 
-    async function getBookings() {
-      const snapshot = await getDocs(collection(db, "bookings"));
-      return snapshot.docs.map((docSnap) => ({
-        id: docSnap.id,
-        ...docSnap.data()
-      }));
-    }
-
-    function getCustomerPoints(bookings, phone) {
-      let points = 0;
-      bookings.forEach((booking) => {
-        if (booking.phone === phone) {
-          points += booking.points || 0;
-        }
-      });
-      return points;
-    }
-
-    function getRewardEligibleCustomers(bookings) {
-      const phones = [...new Set(bookings.map((b) => b.phone))];
-      return phones.filter((phone) => getCustomerPoints(bookings, phone) >= 3).length;
-    }
-
-    function statusClass(status) {
-      if (status === "جديد") return "new";
-      if (status === "تم التأكيد") return "confirmed";
-      if (status === "مكتمل") return "done";
-      return "new";
-    }
-
     async function updateStatus(id, newStatus) {
-      const bookings = await getBookings();
-      const booking = bookings.find((b) => b.id === id);
-
+      const bookings = await getBookingsRaw();
+      const booking = bookings.find(b => b.id === id);
       if (!booking) return;
 
-      let newPoints = booking.points || 0;
+      const updates = { status: newStatus };
 
       if (booking.status !== "مكتمل" && newStatus === "مكتمل") {
-        newPoints += 1;
+        updates.points = (booking.points || 0) + 1;
+
+        if (!booking.incomeAdded) {
+          updates.incomeAdded = true;
+          updates.autoIncome = getTripPrice(booking.tripType);
+        }
       }
 
-      await updateDoc(doc(db, "bookings", id), {
-        status: newStatus,
-        points: newPoints
-      });
-
-      renderBookings();
+      await updateDoc(doc(db, "bookings", id), updates);
+      renderAll();
     }
 
     async function useReward(phone) {
-      const bookings = await getBookings();
+      const bookings = await getBookingsRaw();
       const currentPoints = getCustomerPoints(bookings, phone);
 
       if (currentPoints < 3) {
@@ -401,125 +594,219 @@
 
       let remaining = 3;
 
-      for (const booking of bookings) {
-        if (booking.phone === phone && (booking.points || 0) > 0 && remaining > 0) {
-          const current = booking.points || 0;
-          const updated = current <= remaining ? 0 : current - remaining;
-          remaining -= Math.min(current, remaining);
+      const sameCustomer = bookings
+        .filter(booking => booking.phone === phone && (booking.points || 0) > 0);
 
-          await updateDoc(doc(db, "bookings", booking.id), {
-            points: updated
-          });
-        }
+      for (const booking of sameCustomer) {
+        if (remaining <= 0) break;
+
+        const current = booking.points || 0;
+        const nextValue = current <= remaining ? 0 : current - remaining;
+        remaining -= Math.min(current, remaining);
+
+        await updateDoc(doc(db, "bookings", booking.id), {
+          points: nextValue
+        });
       }
 
       alert("✅ تم استخدام الرحلة المجانية");
-      renderBookings();
+      renderAll();
     }
 
-    async function deleteBooking(id) {
+    async function deleteBookingItem(id) {
       await deleteDoc(doc(db, "bookings", id));
-      renderBookings();
+      renderAll();
     }
 
-    async function clearBookings() {
-      const confirmDelete = confirm("هل أنت متأكد من حذف جميع الحجوزات؟");
-      if (!confirmDelete) return;
+    async function addFinanceEntry() {
+      const type = document.getElementById("financeType").value;
+      const amount = Number(document.getElementById("financeAmount").value);
+      const note = document.getElementById("financeNote").value.trim();
 
-      const bookings = await getBookings();
+      if (!amount || amount <= 0) {
+        alert("⚠️ أدخل مبلغ صحيح");
+        return;
+      }
 
+      await addDoc(collection(db, "financeEntries"), {
+        type,
+        amount,
+        note,
+        createdAt: new Date().toISOString()
+      });
+
+      document.getElementById("financeAmount").value = "";
+      document.getElementById("financeNote").value = "";
+      renderAll();
+    }
+
+    async function deleteFinanceEntry(id) {
+      await deleteDoc(doc(db, "financeEntries", id));
+      renderAll();
+    }
+
+    async function clearAllBookings() {
+      const ok = confirm("هل أنت متأكد من حذف جميع الحجوزات؟");
+      if (!ok) return;
+
+      const bookings = await getBookingsRaw();
       for (const booking of bookings) {
         await deleteDoc(doc(db, "bookings", booking.id));
       }
 
-      renderBookings();
+      renderAll();
     }
 
-    function updateStats(bookings) {
-      const totalBookings = bookings.length;
-      const completedBookings = bookings.filter((b) => b.status === "مكتمل").length;
-      const totalPoints = bookings.reduce((sum, b) => sum + (b.points || 0), 0);
-      const rewardClients = getRewardEligibleCustomers(bookings);
+    async function clearAllFinance() {
+      const ok = confirm("هل أنت متأكد من حذف جميع الحركات المالية؟");
+      if (!ok) return;
 
-      document.getElementById("totalBookings").textContent = totalBookings;
-      document.getElementById("completedBookings").textContent = completedBookings;
-      document.getElementById("totalPoints").textContent = totalPoints;
-      document.getElementById("rewardClients").textContent = rewardClients;
+      const entries = await getFinanceEntries();
+      for (const entry of entries) {
+        await deleteDoc(doc(db, "financeEntries", entry.id));
+      }
+
+      renderAll();
     }
 
-    async function renderBookings() {
-      const content = document.getElementById("content");
-      const bookings = (await getBookings()).reverse();
+    function renderStats(bookings, financeEntries) {
+      const completedBookings = bookings.filter(b => b.status === "مكتمل");
+      const totalAutoIncome = completedBookings.reduce((sum, b) => {
+        if (typeof b.autoIncome === "number") return sum + b.autoIncome;
+        return sum + getTripPrice(b.tripType);
+      }, 0);
 
-      updateStats(bookings);
+      const manualIncome = financeEntries
+        .filter(entry => entry.type === "income")
+        .reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
 
-      if (bookings.length === 0) {
-        content.innerHTML = '<div class="empty">لا توجد حجوزات حتى الآن.</div>';
+      const totalExpense = financeEntries
+        .filter(entry => entry.type === "expense")
+        .reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
+
+      const totalIncome = totalAutoIncome + manualIncome;
+      const netProfit = totalIncome - totalExpense;
+
+      document.getElementById("totalBookings").textContent = bookings.length;
+      document.getElementById("completedBookings").textContent = completedBookings.length;
+      document.getElementById("rewardClients").textContent = getRewardEligibleCustomers(bookings);
+      document.getElementById("totalPoints").textContent = bookings.reduce((sum, b) => sum + (b.points || 0), 0);
+      document.getElementById("totalIncome").textContent = `${totalIncome} ريال`;
+      document.getElementById("totalExpense").textContent = `${totalExpense} ريال`;
+      document.getElementById("netProfit").textContent = `${netProfit} ريال`;
+    }
+
+    function renderBookingsTable(bookings) {
+      const tbody = document.getElementById("bookingsBody");
+
+      if (!bookings.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="11">
+              <div class="empty">لا توجد حجوزات حتى الآن.</div>
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      let rows = bookings.map((booking) => {
+      const rows = [...bookings].reverse().map(booking => {
         const customerPoints = getCustomerPoints(bookings, booking.phone);
         const hasReward = customerPoints >= 3;
+        const bookingIncome = booking.status === "مكتمل"
+          ? (typeof booking.autoIncome === "number" ? booking.autoIncome : getTripPrice(booking.tripType))
+          : 0;
 
         return `
           <tr>
-            <td>${booking.name}</td>
-            <td>${booking.phone}</td>
-            <td>${booking.tripType}</td>
-            <td>${booking.duration}</td>
-            <td>${booking.date}</td>
-            <td>${booking.time}</td>
+            <td>${booking.name || "-"}</td>
+            <td>${booking.phone || "-"}</td>
+            <td>${booking.tripType || "-"}</td>
+            <td>${booking.date || "-"}</td>
+            <td>${booking.time || "-"}</td>
             <td>${booking.notes || "لا يوجد"}</td>
-            <td><span class="status ${statusClass(booking.status)}">${booking.status}</span></td>
+            <td><span class="status ${statusClass(booking.status)}">${booking.status || "جديد"}</span></td>
             <td>${customerPoints} نقطة</td>
             <td>
               ${hasReward ? '<span class="reward-badge">🎁 مستحق رحلة مجانية</span>' : '<span class="muted">غير مستحق بعد</span>'}
             </td>
             <td>
+              ${bookingIncome > 0 ? `<span class="pill-income">+${bookingIncome} ريال</span>` : '<span class="muted">لم يحتسب بعد</span>'}
+            </td>
+            <td>
               <button class="primary small-btn" onclick="updateStatus('${booking.id}', 'تم التأكيد')">تأكيد</button>
               <button class="success small-btn" onclick="updateStatus('${booking.id}', 'مكتمل')">إكمال</button>
-              ${hasReward
-                ? `<button class="warning small-btn" onclick="useReward('${booking.phone}')">استخدام المكافأة</button>`
-                : `<button class="warning small-btn disabled-btn" disabled>غير متاح</button>`
+              ${
+                hasReward
+                  ? `<button class="warning small-btn" onclick="useReward('${booking.phone}')">استخدام المكافأة</button>`
+                  : `<button class="warning small-btn disabled-btn" disabled>غير متاح</button>`
               }
-              <button class="danger small-btn" onclick="deleteBooking('${booking.id}')">حذف</button>
+              <button class="danger small-btn" onclick="deleteBookingItem('${booking.id}')">حذف</button>
             </td>
           </tr>
         `;
       }).join("");
 
-      content.innerHTML = `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>الاسم</th>
-                <th>رقم الجوال</th>
-                <th>نوع الرحلة</th>
-                <th>المدة</th>
-                <th>التاريخ</th>
-                <th>الوقت</th>
-                <th>الملاحظات</th>
-                <th>الحالة</th>
-                <th>نقاط العميل</th>
-                <th>المكافأة</th>
-                <th>الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows}
-            </tbody>
-          </table>
-        </div>
-      `;
+      tbody.innerHTML = rows;
     }
 
-    window.renderBookings = renderBookings;
+    function renderFinanceTable(entries) {
+      const tbody = document.getElementById("financeBody");
+
+      if (!entries.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty">لا توجد حركات مالية حتى الآن.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const rows = [...entries]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .map(entry => `
+          <tr>
+            <td>${entry.type === "income" ? '<span class="pill-income">مدخول</span>' : '<span class="pill-expense">مصروف</span>'}</td>
+            <td>${entry.amount} ريال</td>
+            <td>${entry.note || "بدون ملاحظة"}</td>
+            <td>${entry.createdAt ? new Date(entry.createdAt).toLocaleString("ar-SA") : "-"}</td>
+            <td>
+              <button class="danger small-btn" onclick="deleteFinanceEntry('${entry.id}')">حذف</button>
+            </td>
+          </tr>
+        `).join("");
+
+      tbody.innerHTML = rows;
+    }
+
+    async function renderAll() {
+      const bookings = await getBookingsRaw();
+      const financeEntries = await getFinanceEntries();
+
+      renderStats(bookings, financeEntries);
+      renderBookingsTable(bookings);
+      renderFinanceTable(financeEntries);
+    }
+
+    async function refreshBookingsOnly() {
+      const bookings = await getBookingsRaw();
+      const financeEntries = await getFinanceEntries();
+
+      renderStats(bookings, financeEntries);
+      renderBookingsTable(bookings);
+    }
+
+    window.renderAll = renderAll;
+    window.refreshBookingsOnly = refreshBookingsOnly;
     window.updateStatus = updateStatus;
     window.useReward = useReward;
-    window.deleteBooking = deleteBooking;
-    window.clearBookings = clearBookings;
+    window.deleteBookingItem = deleteBookingItem;
+    window.addFinanceEntry = addFinanceEntry;
+    window.deleteFinanceEntry = deleteFinanceEntry;
+    window.clearAllBookings = clearAllBookings;
+    window.clearAllFinance = clearAllFinance;
   </script>
 </body>
 </html>
