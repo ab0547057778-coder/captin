@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الكابتن شريف</title>
+  <title>الكابتن أبو عبدالله</title>
   <style>
     * {
       box-sizing: border-box;
@@ -54,7 +54,7 @@
 
     .section-title {
       font-size: 28px;
-      color: #327896;
+      color: #0b4f6c;
       margin-bottom: 18px;
       text-align: center;
     }
@@ -99,6 +99,7 @@
     .price-item {
       display: flex;
       justify-content: space-between;
+      gap: 12px;
       padding: 10px 0;
       border-bottom: 1px dashed #d7e8f0;
       font-size: 16px;
@@ -154,6 +155,14 @@
       background: #fbfdff;
       font-size: 15px;
       outline: none;
+      transition: 0.2s ease;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #1f8fbd;
+      box-shadow: 0 0 0 4px rgba(31, 143, 189, 0.10);
     }
 
     .full-width {
@@ -170,6 +179,25 @@
       font-weight: bold;
       background: linear-gradient(135deg, #118ab2, #0b6d90);
       color: white;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px rgba(17, 138, 178, 0.2);
+    }
+
+    .secondary-btn {
+      width: 100%;
+      margin-top: 12px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #eef7fb;
+      color: #0b4f6c;
       cursor: pointer;
     }
 
@@ -212,6 +240,18 @@
       font-size: 15px;
     }
 
+    .saved-phone-box {
+      background: #eef7fb;
+      border: 1px solid #d6eaf5;
+      color: #0b4f6c;
+      padding: 14px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 14px;
+      display: none;
+    }
+
     .chat-toggle {
       position: fixed;
       bottom: 22px;
@@ -224,6 +264,7 @@
       color: white;
       font-size: 28px;
       cursor: pointer;
+      box-shadow: 0 16px 30px rgba(17, 138, 178, 0.30);
       z-index: 1001;
     }
 
@@ -346,54 +387,63 @@
   </style>
 </head>
 <body>
+
   <header>
-    <h1>🚤 الكابتن شريف</h1>
+    <h1>🚤 الكابتن أبو عبدالله</h1>
     <p>رحلات بحرية مميزة للنزهة والصيد بأجواء ممتعة وخدمة موثوقة</p>
     <div class="hero-badge">حجز سريع • أسعار واضحة • أوقات مرنة</div>
   </header>
 
   <div class="container">
     <h2 class="section-title">اختر الرحلة المناسبة لك</h2>
-    <p class="section-subtitle">نوفّر رحلات نزهة عائلية ورحلات صيد حسب الوقت المناسب لك</p>
+    <p class="section-subtitle">استمتع بأفضل الجولات البحرية والبكجات الترفيهية</p>
 
     <div class="cards">
       <div class="card">
         <div class="emoji">🛥️</div>
-        <h3>قارب نزهة</h3>
+        <h3>الجولات البحرية</h3>
+
         <div class="price-list">
           <div class="price-item">
-            <span>رحلة ساعة</span>
-            <strong>300 ريال</strong>
+            <span>جولة صغيرة</span>
+            <strong>100 ريال</strong>
           </div>
           <div class="price-item">
-            <span>رحلة ساعتين</span>
-            <strong>500 ريال</strong>
+            <span>جولة كبيرة</span>
+            <strong>200 ريال</strong>
           </div>
         </div>
+
         <div class="features">
-          <div>✔️ مناسب للعائلات والأصدقاء</div>
+          <div>✔️ مناسبة للنزهة السريعة</div>
           <div>✔️ أجواء بحرية ممتعة</div>
-          <div>✔️ أوقات مرنة حسب التوفر</div>
+          <div>✔️ مناسبة للعائلات والأصدقاء</div>
         </div>
       </div>
 
       <div class="card">
-        <div class="emoji">🎣</div>
-        <h3>قارب صيد</h3>
+        <div class="emoji">🎉</div>
+        <h3>الرحلات والبكجات</h3>
+
         <div class="price-list">
           <div class="price-item">
-            <span>رحلة 3 ساعات</span>
-            <strong>700 ريال</strong>
+            <span>نصف ساعة</span>
+            <strong>350 ريال</strong>
           </div>
           <div class="price-item">
-            <span>رحلة 5 ساعات</span>
+            <span>ساعة</span>
+            <strong>600 ريال</strong>
+          </div>
+          <div class="price-item">
+            <span>بكج الترفيه لمدة ساعة</span>
             <strong>1000 ريال</strong>
           </div>
         </div>
+
         <div class="features">
-          <div>✔️ مناسب لمحبي الصيد</div>
-          <div>✔️ تجربة بحرية ممتعة</div>
-          <div>✔️ إمكانية تنسيق الوقت مسبقًا</div>
+          <div>✔️ تجربة بحرية متكاملة</div>
+          <div>✔️ مناسبة للمناسبات والجلسات</div>
+          <div>✔️ أوقات مرنة حسب التوفر</div>
         </div>
       </div>
     </div>
@@ -408,14 +458,31 @@
         <p>الحجز متاح حسب الأوقات المتوفرة خلال اليوم</p>
       </div>
       <div class="info-card">
-        <h4>📞 التواصل</h4>
-        <p>أرسل بياناتك وسيتم التواصل معك لتأكيد الموعد</p>
+        <h4>🎁 برنامج الولاء</h4>
+        <p>كل 3 نقاط = رحلة مجانية</p>
       </div>
     </div>
 
     <div class="booking-box">
+      <h2 class="section-title">الدخول برقم الجوال</h2>
+      <p class="section-subtitle">أدخل رقم جوالك مرة واحدة وسيتم ربط جميع حجوزاتك ونقاطك به</p>
+
+      <div class="booking-grid">
+        <div class="field full-width">
+          <label for="userPhone">رقم الجوال</label>
+          <input type="tel" id="userPhone" placeholder="05xxxxxxxx">
+        </div>
+      </div>
+
+      <button class="submit-btn" type="button" onclick="saveUserPhone()">حفظ رقم الجوال</button>
+      <button class="secondary-btn" type="button" onclick="clearSavedPhone()">تغيير الرقم</button>
+
+      <div class="saved-phone-box" id="savedPhoneBox"></div>
+    </div>
+
+    <div class="booking-box">
       <h2 class="section-title">احجز رحلتك الآن</h2>
-      <p class="section-subtitle">املأ البيانات التالية وسيتم مراجعة الحجز</p>
+      <p class="section-subtitle">بعد حفظ رقم الجوال، أكمل الحجز وسيتم ربطه بحسابك تلقائيًا</p>
 
       <form id="bookingForm">
         <div class="booking-grid">
@@ -425,23 +492,14 @@
           </div>
 
           <div class="field">
-            <label for="phone">رقم الجوال</label>
-            <input type="tel" id="phone" placeholder="05xxxxxxxx" required>
-          </div>
-
-          <div class="field">
             <label for="tripType">نوع الرحلة</label>
             <select id="tripType" required>
-              <option value="">اختر نوع الرحلة</option>
-              <option value="نزهة">نزهة</option>
-              <option value="صيد">صيد</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="duration">مدة الرحلة</label>
-            <select id="duration" required>
-              <option value="">اختر المدة</option>
+              <option value="">اختر الرحلة</option>
+              <option value="جولة صغيرة">جولة صغيرة</option>
+              <option value="جولة كبيرة">جولة كبيرة</option>
+              <option value="نصف ساعة">نصف ساعة</option>
+              <option value="ساعة">ساعة</option>
+              <option value="بكج الترفيه لمدة ساعة">بكج الترفيه لمدة ساعة</option>
             </select>
           </div>
 
@@ -462,8 +520,16 @@
         </div>
 
         <button class="submit-btn" type="submit">تأكيد الحجز</button>
-        <div class="success-msg" id="successMsg">✅ تم إرسال الحجز بنجاح.</div>
+        <div class="success-msg" id="successMsg"></div>
       </form>
+    </div>
+
+    <div class="booking-box">
+      <h2 class="section-title">برنامج الولاء</h2>
+      <p class="section-subtitle">اضغط لمعرفة نقاطك الحالية باستخدام الرقم المحفوظ</p>
+
+      <button class="submit-btn" type="button" onclick="checkCustomerPoints()">عرض نقاطي</button>
+      <div class="success-msg" id="loyaltyResult"></div>
     </div>
   </div>
 
@@ -471,7 +537,7 @@
 
   <div class="chat-widget" id="chatWidget">
     <div class="chat-header">
-      مساعد الكابتن شريف
+      مساعد الكابتن أبو عبدالله
       <div class="chat-sub">اسأل عن الأسعار أو الأوقات أو طريقة الحجز</div>
     </div>
     <div class="chat-box" id="chatBox">
@@ -484,168 +550,235 @@
   </div>
 
   <footer>
-    جميع الحقوق محفوظة © Programmer Abdullah
+    جميع الحقوق محفوظة © الكابتن أبو عبدالله
   </footer>
 
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBIrEMz-cTVb4ZFARdA7NQywWEbJ9ZrjE",
-    authDomain: "captain-site-16f2d.firebaseapp.com",
-    projectId: "captain-site-16f2d",
-    storageBucket: "captain-site-16f2d.firebasestorage.app",
-    messagingSenderId: "950382729411",
-    appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
-    measurementId: "G-4K0RXH2W61"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  const bookingForm = document.getElementById("bookingForm");
-  const successMsg = document.getElementById("successMsg");
-  const tripType = document.getElementById("tripType");
-  const duration = document.getElementById("duration");
-
-  tripType.addEventListener("change", function () {
-    const value = this.value;
-    duration.innerHTML = '<option value="">اختر المدة</option>';
-
-    if (value === "نزهة") {
-      duration.innerHTML += '<option value="ساعة">ساعة</option>';
-      duration.innerHTML += '<option value="ساعتين">ساعتين</option>';
-    } else if (value === "صيد") {
-      duration.innerHTML += '<option value="3 ساعات">3 ساعات</option>';
-      duration.innerHTML += '<option value="5 ساعات">5 ساعات</option>';
-    }
-  });
-
-  bookingForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const newBooking = {
-      name: document.getElementById("name").value.trim(),
-      phone: document.getElementById("phone").value.trim(),
-      tripType: document.getElementById("tripType").value,
-      duration: document.getElementById("duration").value,
-      date: document.getElementById("date").value,
-      time: document.getElementById("time").value,
-      notes: document.getElementById("notes").value.trim(),
-      status: "جديد",
-      points: 0,
-      createdAt: new Date().toISOString()
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIrEMz-cTVb4ZFARdA7NQywWEbJ9ZrjE",
+      authDomain: "captain-site-16f2d.firebaseapp.com",
+      projectId: "captain-site-16f2d",
+      storageBucket: "captain-site-16f2d.firebasestorage.app",
+      messagingSenderId: "950382729411",
+      appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
+      measurementId: "G-4K0RXH2W61"
     };
 
-    try {
-      await addDoc(collection(db, "bookings"), newBooking);
-      successMsg.style.display = "block";
-      successMsg.textContent = "✅ تم إرسال الحجز بنجاح";
-      bookingForm.reset();
-      duration.innerHTML = '<option value="">اختر المدة</option>';
-    } catch (error) {
-      console.error(error);
-      successMsg.style.display = "block";
-      successMsg.textContent = "❌ حدث خطأ أثناء إرسال الحجز";
-    }
-  });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  window.checkCustomerPoints = async function () {
-    const phone = document.getElementById("loyaltyPhone").value.trim();
-    const loyaltyResult = document.getElementById("loyaltyResult");
+    const bookingForm = document.getElementById("bookingForm");
+    const successMsg = document.getElementById("successMsg");
+    const savedPhoneBox = document.getElementById("savedPhoneBox");
 
-    if (!phone) {
-      loyaltyResult.style.display = "block";
-      loyaltyResult.innerHTML = "⚠️ فضلاً أدخل رقم الجوال أولاً";
-      return;
-    }
+    function showSavedPhone() {
+      const savedPhone = localStorage.getItem("userPhone");
 
-    try {
-      const snapshot = await getDocs(collection(db, "bookings"));
-      let points = 0;
-
-      snapshot.forEach((doc) => {
-        const booking = doc.data();
-        if (booking.phone === phone) {
-          points += booking.points || 0;
-        }
-      });
-
-      loyaltyResult.style.display = "block";
-
-      if (points >= 3) {
-        loyaltyResult.innerHTML = `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`;
-      } else if (points > 0) {
-        loyaltyResult.innerHTML = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
+      if (savedPhone) {
+        savedPhoneBox.style.display = "block";
+        savedPhoneBox.innerHTML = `✅ الرقم المحفوظ: ${savedPhone}`;
       } else {
-        loyaltyResult.innerHTML = "لا توجد نقاط مسجلة لهذا الرقم حاليًا.";
+        savedPhoneBox.style.display = "none";
+        savedPhoneBox.innerHTML = "";
       }
-    } catch (error) {
-      console.error(error);
-      loyaltyResult.style.display = "block";
-      loyaltyResult.innerHTML = "❌ تعذر جلب النقاط حالياً";
-    }
-  };
-
-  function addMessage(text, sender) {
-    const chatBox = document.getElementById("chatBox");
-    const message = document.createElement("div");
-    message.className = `msg ${sender}`;
-    message.textContent = text;
-    chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function getBotReply(message) {
-    const text = message.toLowerCase();
-
-    if (text.includes("هلا") || text.includes("مرحبا") || text.includes("السلام") || text.includes("اهلا")) {
-      return "ياهلا وسهلا، تقدر تسألني عن الأسعار أو الأوقات أو طريقة الحجز.";
-    }
-    if (text.includes("سعر") || text.includes("كم") || text.includes("الاسعار") || text.includes("بكم")) {
-      return "رحلات النزهة: ساعة بـ 300 ريال، وساعتين بـ 500 ريال. رحلات الصيد: 3 ساعات بـ 700 ريال، و5 ساعات بـ 1000 ريال.";
-    }
-    if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
-      return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
-    }
-    if (text.includes("حجز") || text.includes("احجز") || text.includes("موعد")) {
-      return "تقدر تحجز مباشرة من نموذج الحجز الموجود في الصفحة.";
-    }
-    if (text.includes("موقع") || text.includes("وين") || text.includes("الموقع")) {
-      return "نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل معك.";
     }
 
-    return "أقدر أساعدك في الأسعار، الأوقات، نوع الرحلات، أو طريقة الحجز.";
-  }
+    window.saveUserPhone = function () {
+      const phone = document.getElementById("userPhone").value.trim();
 
-  window.toggleChat = function () {
-    const chat = document.getElementById("chatWidget");
-    chat.style.display = chat.style.display === "block" ? "none" : "block";
-  };
+      if (!phone) {
+        alert("فضلاً أدخل رقم الجوال");
+        return;
+      }
 
-  window.sendMessage = function () {
-    const input = document.getElementById("chatInput");
-    const text = input.value.trim();
+      localStorage.setItem("userPhone", phone);
+      showSavedPhone();
+      alert("✅ تم حفظ رقم الجوال بنجاح");
+    };
 
-    if (!text) return;
+    window.clearSavedPhone = function () {
+      localStorage.removeItem("userPhone");
+      document.getElementById("userPhone").value = "";
+      showSavedPhone();
+      alert("تم حذف الرقم المحفوظ");
+    };
 
-    addMessage(text, "user");
+    const savedPhone = localStorage.getItem("userPhone");
+    if (savedPhone) {
+      document.getElementById("userPhone").value = savedPhone;
+    }
+    showSavedPhone();
 
-    setTimeout(() => {
-      addMessage(getBotReply(text), "bot");
-    }, 350);
-
-    input.value = "";
-    input.focus();
-  };
-
-  document.getElementById("chatInput").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
+    bookingForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      sendMessage();
+
+      const userPhone = localStorage.getItem("userPhone");
+
+      if (!userPhone) {
+        successMsg.style.display = "block";
+        successMsg.style.background = "#fff3cd";
+        successMsg.style.color = "#8a6d3b";
+        successMsg.style.border = "1px solid #ffe69c";
+        successMsg.textContent = "⚠️ فضلاً احفظ رقم الجوال أولاً قبل الحجز";
+        return;
+      }
+
+      const newBooking = {
+        name: document.getElementById("name").value.trim(),
+        phone: userPhone,
+        tripType: document.getElementById("tripType").value,
+        duration: document.getElementById("tripType").value,
+        date: document.getElementById("date").value,
+        time: document.getElementById("time").value,
+        notes: document.getElementById("notes").value.trim(),
+        status: "جديد",
+        points: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "bookings"), newBooking);
+        successMsg.style.display = "block";
+        successMsg.style.background = "#eafaf0";
+        successMsg.style.color = "#16753b";
+        successMsg.style.border = "1px solid #bde2ca";
+        successMsg.textContent = "✅ تم إرسال الحجز بنجاح";
+        bookingForm.reset();
+      } catch (error) {
+        console.error(error);
+        successMsg.style.display = "block";
+        successMsg.style.background = "#fdeaea";
+        successMsg.style.color = "#b42318";
+        successMsg.style.border = "1px solid #f5c2c7";
+        successMsg.textContent = "❌ حدث خطأ أثناء إرسال الحجز";
+      }
+    });
+
+    window.checkCustomerPoints = async function () {
+      const loyaltyResult = document.getElementById("loyaltyResult");
+      const phone = localStorage.getItem("userPhone");
+
+      if (!phone) {
+        loyaltyResult.style.display = "block";
+        loyaltyResult.style.background = "#fff3cd";
+        loyaltyResult.style.color = "#8a6d3b";
+        loyaltyResult.style.border = "1px solid #ffe69c";
+        loyaltyResult.innerHTML = "⚠️ فضلاً احفظ رقم الجوال أولاً";
+        return;
+      }
+
+      try {
+        const snapshot = await getDocs(collection(db, "bookings"));
+        let points = 0;
+
+        snapshot.forEach((doc) => {
+          const booking = doc.data();
+          if (booking.phone === phone) {
+            points += booking.points || 0;
+          }
+        });
+
+        loyaltyResult.style.display = "block";
+
+        if (points >= 3) {
+          loyaltyResult.style.background = "#eafaf0";
+          loyaltyResult.style.color = "#16753b";
+          loyaltyResult.style.border = "1px solid #bde2ca";
+          loyaltyResult.innerHTML = `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`;
+        } else if (points > 0) {
+          loyaltyResult.style.background = "#eef7fb";
+          loyaltyResult.style.color = "#0b4f6c";
+          loyaltyResult.style.border = "1px solid #d6eaf5";
+          loyaltyResult.innerHTML = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
+        } else {
+          loyaltyResult.style.background = "#f8f9fa";
+          loyaltyResult.style.color = "#5c7380";
+          loyaltyResult.style.border = "1px solid #dde5ea";
+          loyaltyResult.innerHTML = "لا توجد نقاط مسجلة لهذا الرقم حاليًا.";
+        }
+      } catch (error) {
+        console.error(error);
+        loyaltyResult.style.display = "block";
+        loyaltyResult.innerHTML = "❌ تعذر جلب النقاط حالياً";
+      }
+    };
+
+    function addMessage(text, sender) {
+      const chatBox = document.getElementById("chatBox");
+      const message = document.createElement("div");
+      message.className = `msg ${sender}`;
+      message.textContent = text;
+      chatBox.appendChild(message);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
-  });
-</script>
+
+    function getBotReply(message) {
+      const text = message.toLowerCase();
+
+      if (text.includes("هلا") || text.includes("مرحبا") || text.includes("السلام") || text.includes("اهلا")) {
+        return "ياهلا وسهلا، تقدر تسألني عن الأسعار أو الأوقات أو طريقة الحجز.";
+      }
+      if (text.includes("سعر") || text.includes("كم") || text.includes("الاسعار") || text.includes("بكم")) {
+        return "الأسعار الحالية: جولة صغيرة 100 ريال، جولة كبيرة 200 ريال، نصف ساعة 350 ريال، ساعة 600 ريال، وبكج الترفيه لمدة ساعة 1000 ريال.";
+      }
+      if (text.includes("جولة صغيرة")) {
+        return "سعر الجولة الصغيرة 100 ريال.";
+      }
+      if (text.includes("جولة كبيرة")) {
+        return "سعر الجولة الكبيرة 200 ريال.";
+      }
+      if (text.includes("نص") || text.includes("نصف ساعة")) {
+        return "سعر رحلة نصف ساعة 350 ريال.";
+      }
+      if (text.includes("ساعة") && !text.includes("بكج")) {
+        return "سعر رحلة الساعة 600 ريال.";
+      }
+      if (text.includes("بكج") || text.includes("الترفيه")) {
+        return "سعر بكج الترفيه لمدة ساعة هو 1000 ريال.";
+      }
+      if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
+        return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
+      }
+      if (text.includes("حجز") || text.includes("احجز") || text.includes("موعد")) {
+        return "ابدأ بحفظ رقم الجوال، ثم استخدم نموذج الحجز الموجود في الصفحة.";
+      }
+      if (text.includes("موقع") || text.includes("وين") || text.includes("الموقع")) {
+        return "نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل معك.";
+      }
+
+      return "أقدر أساعدك في الأسعار، الأوقات، نوع الرحلات، أو طريقة الحجز.";
+    }
+
+    window.toggleChat = function () {
+      const chat = document.getElementById("chatWidget");
+      chat.style.display = chat.style.display === "block" ? "none" : "block";
+    };
+
+    window.sendMessage = function () {
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      addMessage(text, "user");
+
+      setTimeout(() => {
+        addMessage(getBotReply(text), "bot");
+      }, 350);
+
+      input.value = "";
+      input.focus();
+    };
+
+    document.getElementById("chatInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
 </body>
 </html>
