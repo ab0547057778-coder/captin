@@ -22,7 +22,6 @@
       --text-dark: #183242;
       --muted-dark: #68818f;
       --surface: rgba(255, 255, 255, 0.94);
-      --surface-2: rgba(255, 255, 255, 0.08);
       --card-border: #e3edf3;
       --success-bg: #eafaf0;
       --success-text: #16753b;
@@ -866,7 +865,7 @@
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBIrEMz-cTVb4ZFARdA7NQywWEbJ9ZrjE",
+      apiKey: "AIzaSyBIrEMz-ctTVb4ZFARdA7NQywWEbJ9ZrjE",
       authDomain: "captain-site-16f2d.firebaseapp.com",
       projectId: "captain-site-16f2d",
       storageBucket: "captain-site-16f2d.firebasestorage.app",
@@ -1043,41 +1042,21 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function getBotReply(message) {
-      const text = message.toLowerCase();
+    async function getBotReply(message) {
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
 
-      if (text.includes("هلا") || text.includes("مرحبا") || text.includes("السلام") || text.includes("اهلا")) {
-        return "ياهلا وسهلا، تقدر تسألني عن الأسعار أو الأوقات أو طريقة الحجز.";
+        const data = await res.json();
+        return data.reply || "ما قدرت أرد الآن، حاول مرة ثانية.";
+      } catch (err) {
+        return "صار خطأ مؤقت في المساعد، حاول مرة ثانية.";
       }
-      if (text.includes("سعر") || text.includes("كم") || text.includes("الاسعار") || text.includes("بكم")) {
-        return "الأسعار الحالية: جولة صغيرة 100 ريال، جولة كبيرة 200 ريال، نصف ساعة 350 ريال، ساعة 600 ريال، وبكج الترفيه لمدة ساعة 1000 ريال.";
-      }
-      if (text.includes("جولة صغيرة")) {
-        return "سعر الجولة الصغيرة 100 ريال.";
-      }
-      if (text.includes("جولة كبيرة")) {
-        return "سعر الجولة الكبيرة 200 ريال.";
-      }
-      if (text.includes("نص") || text.includes("نصف ساعة")) {
-        return "سعر رحلة نصف ساعة 350 ريال.";
-      }
-      if (text.includes("ساعة") && !text.includes("بكج")) {
-        return "سعر رحلة الساعة 600 ريال.";
-      }
-      if (text.includes("بكج") || text.includes("الترفيه") || text.includes("جيتسكي") || text.includes("بنانا")) {
-        return "بكج الترفيه لمدة ساعة سعره 1000 ريال، ويشمل الجيتسكي والبنانا بوت.";
-      }
-      if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
-        return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
-      }
-      if (text.includes("حجز") || text.includes("احجز") || text.includes("موعد")) {
-        return "ابدأ بحفظ رقم الجوال، ثم استخدم نموذج الحجز الموجود في الصفحة.";
-      }
-      if (text.includes("موقع") || text.includes("وين") || text.includes("الموقع")) {
-        return "نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل معك.";
-      }
-
-      return "أقدر أساعدك في الأسعار، الأوقات، نوع الرحلات، أو طريقة الحجز.";
     }
 
     window.toggleChat = function () {
@@ -1085,20 +1064,27 @@
       chat.style.display = chat.style.display === "block" ? "none" : "block";
     };
 
-    window.sendMessage = function () {
+    window.sendMessage = async function () {
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
 
       if (!text) return;
 
       addMessage(text, "user");
-
-      setTimeout(() => {
-        addMessage(getBotReply(text), "bot");
-      }, 300);
-
       input.value = "";
-      input.focus();
+
+      addMessage("...جاري التفكير", "bot");
+
+      const chatBox = document.getElementById("chatBox");
+      const loadingMsg = chatBox.lastElementChild;
+
+      const reply = await getBotReply(text);
+
+      if (loadingMsg) {
+        loadingMsg.remove();
+      }
+
+      addMessage(reply, "bot");
     };
 
     document.getElementById("chatInput").addEventListener("keypress", function(e) {
