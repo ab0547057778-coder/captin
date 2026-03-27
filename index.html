@@ -12,42 +12,49 @@
     }
 
     :root {
-      --bg: #071c26;
-      --bg-soft: #0b2a38;
+      --bg-dark: #071c26;
+      --bg-dark-2: #0b2a38;
       --primary: #0f6d8f;
       --primary-2: #18a0c9;
-      --text: #f7fbfd;
-      --muted: #bfd4de;
-      --surface: rgba(255, 255, 255, 0.10);
-      --surface-2: rgba(255, 255, 255, 0.06);
-      --border: rgba(255,255,255,0.14);
-      --white: #ffffff;
-      --dark-text: #183242;
+      --gold: #d4a84f;
+      --text-light: #f7fbfd;
+      --muted-light: #c8dbe4;
+      --text-dark: #183242;
+      --muted-dark: #68818f;
+      --surface: rgba(255, 255, 255, 0.94);
+      --surface-2: rgba(255, 255, 255, 0.08);
+      --card-border: #e3edf3;
       --success-bg: #eafaf0;
       --success-text: #16753b;
       --warning-bg: #fff6dd;
       --warning-text: #8a6d3b;
-      --shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
+      --error-bg: #fdeaea;
+      --error-text: #b42318;
+      --shadow: 0 18px 45px rgba(8, 33, 45, 0.16);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
       --radius-md: 16px;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       font-family: Tahoma, Arial, sans-serif;
+      color: var(--text-dark);
       background:
-        radial-gradient(circle at top right, rgba(24,160,201,0.14), transparent 18%),
-        radial-gradient(circle at bottom left, rgba(15,109,143,0.12), transparent 18%),
-        linear-gradient(180deg, #071c26 0%, #0b2a38 40%, #eef6fa 40%, #f8fbfd 100%);
-      color: var(--dark-text);
+        radial-gradient(circle at top right, rgba(24,160,201,0.12), transparent 18%),
+        radial-gradient(circle at bottom left, rgba(15,109,143,0.10), transparent 18%),
+        linear-gradient(180deg, #071c26 0%, #0b2a38 39%, #edf6fa 39%, #f8fbfd 100%);
       min-height: 100vh;
     }
 
     header {
       position: relative;
       overflow: hidden;
-      color: var(--text);
-      padding: 90px 20px 110px;
+      color: var(--text-light);
+      padding: 90px 20px 120px;
       text-align: center;
     }
 
@@ -56,7 +63,7 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(135deg, rgba(5,26,35,0.88), rgba(11,42,56,0.72)),
+        linear-gradient(135deg, rgba(5,24,33,0.88), rgba(11,42,56,0.72)),
         url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
       z-index: -2;
     }
@@ -65,41 +72,41 @@
       content: "";
       position: absolute;
       inset: auto 0 0 0;
-      height: 130px;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(238,246,250,1) 100%);
+      height: 140px;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(237,246,250,1) 100%);
       z-index: -1;
     }
 
     .hero-badge {
       display: inline-block;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: var(--text);
       padding: 10px 18px;
       border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      color: var(--text-light);
       font-size: 14px;
       margin-bottom: 20px;
-      backdrop-filter: blur(10px);
     }
 
     header h1 {
-      font-size: 52px;
+      font-size: 54px;
       margin-bottom: 16px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
     header p {
-      max-width: 760px;
-      margin: 0 auto 24px;
-      color: var(--muted);
+      max-width: 780px;
+      margin: 0 auto 26px;
+      color: var(--muted-light);
       font-size: 18px;
       line-height: 1.9;
     }
 
     .hero-actions {
       display: flex;
-      gap: 12px;
       justify-content: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
@@ -115,13 +122,13 @@
     .hero-btn.primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: white;
-      box-shadow: 0 14px 26px rgba(15,109,143,0.24);
+      box-shadow: 0 14px 28px rgba(15,109,143,0.24);
     }
 
     .hero-btn.secondary {
       background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.18);
       color: white;
+      border: 1px solid rgba(255,255,255,0.18);
       backdrop-filter: blur(10px);
     }
 
@@ -132,37 +139,44 @@
     .container {
       width: 92%;
       max-width: 1180px;
-      margin: -40px auto 40px;
+      margin: -42px auto 42px;
       position: relative;
-      z-index: 3;
+      z-index: 2;
     }
 
     .section {
       margin-bottom: 28px;
     }
 
+    .glass-panel,
+    .booking-box,
+    .info-card,
+    .price-card,
+    .why-card {
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 16px 36px rgba(15,53,72,0.08);
+    }
+
+    .glass-panel {
+      border-radius: var(--radius-xl);
+      padding: 26px;
+    }
+
     .section-title {
-      font-size: 30px;
-      color: #0c4257;
-      margin-bottom: 10px;
+      font-size: 31px;
+      color: #0d465d;
       text-align: center;
+      margin-bottom: 10px;
     }
 
     .section-subtitle {
       text-align: center;
-      color: #617b89;
+      color: var(--muted-dark);
       margin-bottom: 26px;
       font-size: 15px;
       line-height: 1.9;
-    }
-
-    .glass-panel {
-      background: rgba(255,255,255,0.86);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.8);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 18px 40px rgba(15,53,72,0.08);
-      padding: 24px;
     }
 
     .cards {
@@ -172,34 +186,32 @@
     }
 
     .price-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(247,251,253,0.95));
-      border: 1px solid #e4eef4;
-      border-radius: 24px;
+      border-radius: 26px;
       padding: 24px;
-      box-shadow: 0 12px 28px rgba(11,42,56,0.08);
-      transition: 0.2s ease;
+      border: 1px solid var(--card-border);
       position: relative;
       overflow: hidden;
+      transition: 0.2s ease;
     }
 
     .price-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 18px 36px rgba(11,42,56,0.12);
+      box-shadow: 0 20px 38px rgba(15,53,72,0.12);
     }
 
-    .price-card.highlight {
-      border: 1px solid rgba(24,160,201,0.35);
-      box-shadow: 0 16px 34px rgba(24,160,201,0.13);
+    .price-card.featured {
+      border: 1px solid rgba(212,168,79,0.36);
+      box-shadow: 0 20px 40px rgba(212,168,79,0.12);
     }
 
-    .price-card .tag {
+    .featured-tag {
       position: absolute;
       top: 16px;
       left: 16px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      background: linear-gradient(135deg, #bb8b2e, var(--gold));
       color: white;
       font-size: 12px;
-      padding: 6px 10px;
+      padding: 7px 11px;
       border-radius: 999px;
       font-weight: bold;
     }
@@ -210,7 +222,7 @@
     }
 
     .price-card h3 {
-      color: #0d536c;
+      color: #0f5f7a;
       font-size: 24px;
       margin-bottom: 14px;
     }
@@ -220,7 +232,7 @@
       justify-content: space-between;
       gap: 12px;
       padding: 11px 0;
-      border-bottom: 1px dashed #d8e8ef;
+      border-bottom: 1px dashed #d7e7ee;
       font-size: 15px;
     }
 
@@ -229,7 +241,7 @@
     }
 
     .price-item strong {
-      color: #0f6d8f;
+      color: var(--primary);
       white-space: nowrap;
     }
 
@@ -241,7 +253,7 @@
     }
 
     .features div {
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .grid-3 {
@@ -251,22 +263,50 @@
     }
 
     .info-card {
-      background: white;
-      border: 1px solid #e4eef4;
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 20px;
       text-align: center;
-      box-shadow: 0 10px 22px rgba(16,80,108,0.06);
+      border: 1px solid var(--card-border);
     }
 
     .info-card h4 {
-      color: #0d536c;
+      color: #0e5670;
       margin-bottom: 8px;
       font-size: 18px;
     }
 
     .info-card p {
-      color: #617b89;
+      color: var(--muted-dark);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .why-card {
+      border-radius: 22px;
+      padding: 22px;
+      border: 1px solid var(--card-border);
+      text-align: center;
+    }
+
+    .why-card .icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .why-card h4 {
+      color: #0e5670;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .why-card p {
+      color: var(--muted-dark);
       font-size: 14px;
       line-height: 1.8;
     }
@@ -279,22 +319,42 @@
     }
 
     .side-card {
-      background: linear-gradient(180deg, #0d3445, #0f5f7a);
+      background:
+        linear-gradient(135deg, rgba(7,35,47,0.97), rgba(15,95,122,0.94));
       color: white;
-      border-radius: 26px;
-      padding: 24px;
+      border-radius: 28px;
+      padding: 26px;
       box-shadow: var(--shadow);
       position: sticky;
       top: 20px;
+      overflow: hidden;
+    }
+
+    .side-card::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      bottom: -30px;
+      left: -30px;
+    }
+
+    .side-card h3,
+    .side-card p,
+    .side-list {
+      position: relative;
+      z-index: 1;
     }
 
     .side-card h3 {
-      font-size: 24px;
+      font-size: 25px;
       margin-bottom: 10px;
     }
 
     .side-card p {
-      color: #d2e4ec;
+      color: #d4e4eb;
       line-height: 1.9;
       font-size: 14px;
       margin-bottom: 18px;
@@ -306,16 +366,14 @@
       padding: 12px 14px;
       border-radius: 14px;
       margin-bottom: 10px;
-      color: #f5fbfd;
       font-size: 14px;
+      color: #f7fbfd;
     }
 
     .booking-box {
-      background: rgba(255,255,255,0.94);
-      border: 1px solid #e4eef4;
       border-radius: 28px;
       padding: 28px;
-      box-shadow: 0 16px 34px rgba(16,80,108,0.08);
+      border: 1px solid var(--card-border);
     }
 
     .booking-grid {
@@ -341,7 +399,7 @@
     .field textarea {
       padding: 14px 16px;
       border-radius: 16px;
-      border: 1px solid #d7e7ee;
+      border: 1px solid #d6e6ed;
       background: #fcfeff;
       font-size: 15px;
       outline: none;
@@ -380,6 +438,12 @@
       box-shadow: 0 14px 24px rgba(15,109,143,0.18);
     }
 
+    .secondary-btn {
+      margin-top: 12px;
+      background: #eef7fb;
+      color: #0f5f7a;
+    }
+
     .submit-btn:hover,
     .secondary-btn:hover {
       transform: translateY(-1px);
@@ -390,12 +454,6 @@
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
-    }
-
-    .secondary-btn {
-      margin-top: 12px;
-      background: #eef7fb;
-      color: #0f5f7a;
     }
 
     .saved-phone-box,
@@ -413,24 +471,6 @@
       background: #eef7fb;
       border: 1px solid #d6eaf5;
       color: #0b4f6c;
-    }
-
-    .success-msg.success {
-      background: var(--success-bg);
-      color: var(--success-text);
-      border: 1px solid #bde2ca;
-    }
-
-    .success-msg.warning {
-      background: var(--warning-bg);
-      color: var(--warning-text);
-      border: 1px solid #ffe69c;
-    }
-
-    .success-msg.error {
-      background: #fdeaea;
-      color: #b42318;
-      border: 1px solid #f5c2c7;
     }
 
     .chat-toggle {
@@ -588,21 +628,21 @@
 <body>
 
   <header>
-    <div class="hero-badge">خدمة بحرية راقية • تجربة مميزة • حجز سريع</div>
+    <div class="hero-badge">رحلات بحرية راقية • حجز سريع • تجربة مميزة</div>
     <h1>🚤 الكابتن شريف</h1>
-    <p>رحلات بحرية فاخرة وجولات مميزة بأجواء راقية، مع تنظيم احترافي وخدمة مريحة تناسب العائلات والأصدقاء والرحلات الخاصة.</p>
+    <p>نقدّم لك جولات بحرية وتجارب ترفيهية راقية بأجواء مريحة وتنظيم احترافي، لتستمتع بتفاصيل البحر بأفضل صورة.</p>
 
     <div class="hero-actions">
-      <a href="#bookingSection" class="hero-btn primary">احجز الآن</a>
-      <a href="#pricesSection" class="hero-btn secondary">استعرض الأسعار</a>
+      <a href="#bookingSection" class="hero-btn primary">ابدأ الحجز</a>
+      <a href="#pricesSection" class="hero-btn secondary">عرض الأسعار</a>
     </div>
   </header>
 
   <div class="container">
     <section class="section" id="pricesSection">
       <div class="glass-panel">
-        <h2 class="section-title">الرحلات والأسعار</h2>
-        <p class="section-subtitle">اختر الباقة المناسبة لك واستمتع بتجربة بحرية مريحة، بأسعار واضحة وخيارات تناسب مختلف الأوقات.</p>
+        <h2 class="section-title">الباقات والأسعار</h2>
+        <p class="section-subtitle">اختر الرحلة المناسبة لك من الجولات السريعة وحتى البكجات الترفيهية الكاملة، بأسعار واضحة وتجربة مرتبة.</p>
 
         <div class="cards">
           <div class="price-card">
@@ -645,8 +685,8 @@
             </div>
           </div>
 
-          <div class="price-card highlight">
-            <div class="tag">الأكثر تميزًا</div>
+          <div class="price-card featured">
+            <div class="featured-tag">الأكثر تميزًا</div>
             <div class="emoji">🎉</div>
             <h3>بكج الترفيه</h3>
 
@@ -657,8 +697,8 @@
 
             <div class="features">
               <div>✔ تجربة كاملة وفاخرة</div>
-              <div>✔ مناسبة للجلسات والمناسبات</div>
-              <div>✔ خيار مثالي للراحة والمتعة</div>
+              <div>✔ يشمل الجيتسكي</div>
+              <div>✔ يشمل البنانا بوت</div>
             </div>
           </div>
         </div>
@@ -668,30 +708,63 @@
     <section class="section">
       <div class="grid-3">
         <div class="info-card">
-          <h4>📍 نقطة الانطلاق</h4>
-          <p>يتم تحديد الموقع بعد مراجعة الحجز والتواصل مع العميل.</p>
+          <h4>📍 الموقع</h4>
+          <p>يتم تحديد نقطة الانطلاق بعد مراجعة الحجز والتواصل المباشر.</p>
         </div>
         <div class="info-card">
-          <h4>🕒 أوقات مرنة</h4>
-          <p>الحجوزات متاحة حسب الأوقات المتوفرة خلال اليوم.</p>
+          <h4>🕒 الأوقات</h4>
+          <p>الحجز متاح حسب الأوقات المتوفرة خلال اليوم وبشكل منظم.</p>
         </div>
         <div class="info-card">
           <h4>🎁 برنامج الولاء</h4>
-          <p>كل 3 نقاط تحصل على رحلة مجانية للعميل المسجل.</p>
+          <p>كل 3 نقاط يحصل العميل على رحلة مجانية.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="glass-panel">
+        <h2 class="section-title">لماذا تختار الكابتن شريف؟</h2>
+        <p class="section-subtitle">نركّز على الراحة، الوضوح، والتجربة الراقية من أول لحظة وحتى نهاية الرحلة.</p>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="icon">⚓</div>
+            <h4>تنظيم احترافي</h4>
+            <p>حجز مرتب وواضح مع متابعة سهلة وتأكيد مباشر.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="icon">🌊</div>
+            <h4>أجواء بحرية راقية</h4>
+            <p>تجربة مريحة وممتعة تناسب النزهة والاستجمام.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="icon">🎯</div>
+            <h4>خيارات متنوعة</h4>
+            <p>من الجولات السريعة إلى بكجات الترفيه الكاملة.</p>
+          </div>
+
+          <div class="why-card">
+            <div class="icon">💎</div>
+            <h4>خدمة مميزة</h4>
+            <p>تفاصيل مرتبة وواجهة سهلة واهتمام براحة العميل.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section split" id="bookingSection">
       <div class="side-card">
-        <h3>تجربة راقية تبدأ من هنا</h3>
+        <h3>رحلة راقية تبدأ بخطوة بسيطة</h3>
         <p>احفظ رقم جوالك مرة واحدة، وبعدها تصبح حجوزاتك ونقاطك مرتبطة به تلقائيًا داخل النظام.</p>
 
         <div class="side-list">
           <div>📞 حفظ الرقم لربط الحجوزات والولاء</div>
           <div>⚡ حجز سريع خلال أقل من دقيقة</div>
           <div>🎁 متابعة النقاط بسهولة</div>
-          <div>✅ تأكيد منظم وواضح</div>
+          <div>✅ تنظيم واضح وتجربة مريحة</div>
         </div>
       </div>
 
@@ -832,8 +905,24 @@
 
     function setMessageState(el, type, text) {
       el.style.display = "block";
-      el.classList.remove("success", "warning", "error");
-      el.classList.add(type);
+      el.style.background = "";
+      el.style.color = "";
+      el.style.border = "";
+
+      if (type === "success") {
+        el.style.background = "var(--success-bg)";
+        el.style.color = "var(--success-text)";
+        el.style.border = "1px solid #bde2ca";
+      } else if (type === "warning") {
+        el.style.background = "var(--warning-bg)";
+        el.style.color = "var(--warning-text)";
+        el.style.border = "1px solid #ffe69c";
+      } else {
+        el.style.background = "var(--error-bg)";
+        el.style.color = "var(--error-text)";
+        el.style.border = "1px solid #f5c2c7";
+      }
+
       el.textContent = text;
     }
 
@@ -928,14 +1017,12 @@
           setMessageState(loyaltyResult, "success", `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`);
         } else if (points > 0) {
           loyaltyResult.style.display = "block";
-          loyaltyResult.className = "success-msg";
           loyaltyResult.style.background = "#eef7fb";
           loyaltyResult.style.color = "#0b4f6c";
           loyaltyResult.style.border = "1px solid #d6eaf5";
           loyaltyResult.textContent = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
         } else {
           loyaltyResult.style.display = "block";
-          loyaltyResult.className = "success-msg";
           loyaltyResult.style.background = "#f8f9fa";
           loyaltyResult.style.color = "#5c7380";
           loyaltyResult.style.border = "1px solid #dde5ea";
@@ -977,8 +1064,8 @@
       if (text.includes("ساعة") && !text.includes("بكج")) {
         return "سعر رحلة الساعة 600 ريال.";
       }
-      if (text.includes("بكج") || text.includes("الترفيه")) {
-        return "سعر بكج الترفيه لمدة ساعة هو 1000 ريال.";
+      if (text.includes("بكج") || text.includes("الترفيه") || text.includes("جيتسكي") || text.includes("بنانا")) {
+        return "بكج الترفيه لمدة ساعة سعره 1000 ريال، ويشمل الجيتسكي والبنانا بوت.";
       }
       if (text.includes("وقت") || text.includes("متى") || text.includes("الوقت") || text.includes("الأوقات")) {
         return "الحجز متاح حسب الأوقات المتوفرة خلال اليوم.";
