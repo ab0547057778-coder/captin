@@ -11,57 +11,76 @@ export default async function handler(req, res) {
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ reply: "OPENAI_API_KEY غير موجود في Vercel" });
+      return res.status(500).json({ reply: "المفتاح غير موجود في Vercel" });
     }
 
     const systemPrompt = `
-أنت مساعد ذكي لموقع "الكابتن شريف".
+أنت "مساعد الكابتن شريف".
+وظيفتك: خدمة عملاء + مبيعات + مساعد حجز احترافي جدًا لموقع رحلات بحرية.
 
-معلومات الموقع:
+شخصيتك:
+- تتكلم بالعربية وبأسلوب سعودي راقٍ وطبيعي
+- ودود واحترافي ومقنع
+- مختصر وواضح
+- هدفك الأساسي: تحويل الزائر إلى عميل يحجز
+
+معلومات المشروع:
 - جولة صغيرة: 100 ريال
 - جولة كبيرة: 200 ريال
 - نصف ساعة: 350 ريال
 - ساعة: 600 ريال
 - بكج الترفيه لمدة ساعة: 1000 ريال
 - بكج الترفيه يشمل الجيتسكي والبنانا بوت
+- نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل مع العميل
+- الحجز متاح حسب الأوقات المتوفرة خلال اليوم
+- كل 3 نقاط يحصل العميل على رحلة مجانية
+- الحجز يتم عبر نموذج الحجز الموجود في الموقع
 
-تكلم بالعربية وبأسلوب سعودي بسيط وواضح.
-لا تخترع معلومات غير موجودة.
+قواعد مهمة:
+- لا تخترع معلومات غير موجودة
+- إذا سأل عن السعر، جاوبه بوضوح
+- إذا سأل عن البكج، أكد أنه يشمل الجيتسكي والبنانا بوت
+- إذا كان جاهز للحجز، وجهه لحفظ رقم الجوال وتعبئة نموذج الحجز
+- إذا كان متردد، رشح له الأنسب حسب احتياجه
 `;
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json",
-        "Authorization": Bearer ${process.env.OPENAI_API_KEY}
+        "HTTP-Referer": "https://captin-zeta.vercel.app",
+        "X-Title": "Captain Sharif Website"
       },
       body: JSON.stringify({
-        model: "gpt-5-mini",
-        input: [
+        model: "openai/gpt-4o-mini",
+        messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: message }
-        ]
+        ],
+        temperature: 0.8,
+        max_tokens: 300
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenAI error:", data);
+      console.error("OpenRouter error:", data);
       return res.status(500).json({
-        reply: خطأ من OpenAI: ${data?.error?.message || "غير معروف"}
+        reply: `خطأ من OpenRouter: ${data?.error?.message || "غير معروف"}`
       });
     }
 
     const reply =
-      data?.output?.[0]?.content?.[0]?.text ||
-      "ما قدرت أطلع الرد من OpenAI.";
+      data?.choices?.[0]?.message?.content?.trim() ||
+      "حياك الله، ما قدرت أطلع الرد الآن. حاول مرة ثانية.";
 
     return res.status(200).json({ reply });
   } catch (error) {
     console.error("Server error:", error);
     return res.status(500).json({
-      reply: خطأ في السيرفر: ${error.message}
+      reply: `خطأ في السيرفر: ${error.message}`
     });
   }
 }
