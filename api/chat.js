@@ -10,63 +10,58 @@ export default async function handler(req, res) {
       return res.status(400).json({ reply: "الرسالة فارغة" });
     }
 
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ reply: "OPENAI_API_KEY غير موجود في Vercel" });
+    }
+
     const systemPrompt = `
 أنت مساعد ذكي لموقع "الكابتن شريف".
 
-معلومات الموقع والخدمات:
+معلومات الموقع:
 - جولة صغيرة: 100 ريال
 - جولة كبيرة: 200 ريال
 - نصف ساعة: 350 ريال
 - ساعة: 600 ريال
 - بكج الترفيه لمدة ساعة: 1000 ريال
 - بكج الترفيه يشمل الجيتسكي والبنانا بوت
-- الموقع خاص بالرحلات البحرية
-- نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل مع العميل
-- الحجز متاح حسب الأوقات المتوفرة خلال اليوم
-- كل 3 نقاط يحصل العميل على رحلة مجانية
 
-طريقة الرد:
-- تكلم بالعربية وبأسلوب سعودي بسيط ومرتب
-- كن ذكيًا وودودًا ومختصرًا
-- حاول تقنع العميل بالحجز إذا كان متردد
-- لا تخترع معلومات غير موجودة
-- إذا سأل عن الحجز، وجهه لتعبئة نموذج الحجز في الموقع
-- إذا سأل عن الأسعار، اذكرها بوضوح
-- إذا سأل عن بكج الترفيه، اذكر أنه يشمل الجيتسكي والبنانا بوت
+تكلم بالعربية وبأسلوب سعودي بسيط وواضح.
+لا تخترع معلومات غير موجودة.
 `;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": Bearer ${process.env.OPENAI_API_KEY}
       },
       body: JSON.stringify({
         model: "gpt-5-mini",
         input: [
-          {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: message
-          }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
         ]
       })
     });
 
     const data = await response.json();
 
+    if (!response.ok) {
+      console.error("OpenAI error:", data);
+      return res.status(500).json({
+        reply: خطأ من OpenAI: ${data?.error?.message || "غير معروف"}
+      });
+    }
+
     const reply =
       data?.output?.[0]?.content?.[0]?.text ||
-      "حياك الله، حصل خطأ بسيط في الرد. حاول مرة ثانية.";
+      "ما قدرت أطلع الرد من OpenAI.";
 
     return res.status(200).json({ reply });
   } catch (error) {
-    console.error("Chat API error:", error);
+    console.error("Server error:", error);
     return res.status(500).json({
-      reply: "صار خطأ مؤقت في المساعد، حاول مرة ثانية بعد شوي."
+      reply: خطأ في السيرفر: ${error.message}
     });
   }
 }
