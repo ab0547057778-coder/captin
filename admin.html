@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة إدارة الكابتن أبو عبدالله</title>
+  <title>لوحة إدارة الكابتن شريف</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,80 +11,142 @@
       padding: 0;
     }
 
+    :root {
+      --bg: #f4f8fb;
+      --surface: rgba(255,255,255,0.94);
+      --surface-2: #fbfdff;
+      --border: #e3edf3;
+      --text: #183242;
+      --muted: #728896;
+      --primary: #0e5e79;
+      --primary-2: #1780a3;
+      --primary-soft: #e8f5fa;
+      --success: #198754;
+      --success-soft: #eaf8f0;
+      --danger: #c44747;
+      --danger-soft: #fff1f1;
+      --warning: #cc8a17;
+      --warning-soft: #fff8e9;
+      --shadow: 0 18px 40px rgba(16, 53, 72, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
     body {
       font-family: Tahoma, Arial, sans-serif;
-      background: linear-gradient(180deg, #eef7fb 0%, #f8fcff 100%);
-      color: #123;
-      padding: 20px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(23,128,163,0.10), transparent 20%),
+        radial-gradient(circle at bottom left, rgba(14,94,121,0.08), transparent 20%),
+        linear-gradient(180deg, #eef6fa 0%, #f8fbfd 100%);
+      padding: 24px;
     }
 
     .login-box,
-    .panel,
     .header,
     .stats-grid,
     .card,
-    .table-wrap,
-    .empty {
-      background: white;
-      border-radius: 22px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid rgba(227, 237, 243, 0.95);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
     .login-box {
-      max-width: 430px;
+      max-width: 470px;
       margin: 90px auto;
-      padding: 30px;
+      padding: 38px;
       text-align: center;
     }
 
+    .login-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 24px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 18px 28px rgba(14,94,121,0.24);
+    }
+
     .login-box h2 {
-      color: #0b4f6c;
-      margin-bottom: 10px;
-      font-size: 28px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 31px;
     }
 
     .login-box p {
-      color: #5a7481;
-      margin-bottom: 18px;
+      color: var(--muted);
+      margin-bottom: 20px;
       font-size: 15px;
+      line-height: 1.9;
     }
 
-    .login-box input {
+    .login-box input,
+    .manual-booking-form input,
+    .manual-booking-form select,
+    .manual-booking-form textarea,
+    .finance-form input,
+    .finance-form select {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #d5e6ee;
-      border-radius: 14px;
-      margin-bottom: 12px;
-      font-size: 15px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 14px;
       outline: none;
+      background: #fcfeff;
+      color: var(--text);
+      transition: 0.2s ease;
+      font-family: inherit;
     }
 
-    .login-box button,
+    .login-box input:focus,
+    .manual-booking-form input:focus,
+    .manual-booking-form select:focus,
+    .manual-booking-form textarea:focus,
+    .finance-form input:focus,
+    .finance-form select:focus {
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 4px rgba(23,128,163,0.12);
+    }
+
     button {
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
       font-weight: bold;
       transition: 0.2s ease;
-    }
-
-    .login-box button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #118ab2, #0b6d90);
-      color: white;
-      font-size: 16px;
+      font-family: inherit;
     }
 
     button:hover {
       transform: translateY(-1px);
     }
 
+    .login-box button {
+      width: 100%;
+      padding: 15px;
+      color: white;
+      font-size: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 24px rgba(14,94,121,0.18);
+    }
+
     .error-msg {
-      color: #d9534f;
+      color: var(--danger);
       margin-top: 12px;
       font-size: 14px;
       display: none;
+      background: var(--danger-soft);
+      border: 1px solid #f3cccc;
+      border-radius: 14px;
+      padding: 11px;
     }
 
     #dashboard {
@@ -92,20 +154,52 @@
     }
 
     .header {
-      background: linear-gradient(135deg, #0b4f6c, #12739a);
-      color: white;
-      padding: 26px;
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
       margin-bottom: 22px;
+      background:
+        linear-gradient(135deg, rgba(7,39,52,0.96), rgba(14,94,121,0.93)),
+        linear-gradient(180deg, #0c4257, #1780a3);
+      color: white;
+    }
+
+    .header::before {
+      content: "";
+      position: absolute;
+      left: -30px;
+      bottom: -30px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .header h1,
+    .header p {
+      position: relative;
+      z-index: 1;
     }
 
     .header h1 {
       margin-bottom: 8px;
-      font-size: 30px;
+      font-size: 34px;
     }
 
     .header p {
-      opacity: 0.95;
       font-size: 15px;
+      opacity: 0.96;
     }
 
     .stats-grid {
@@ -117,73 +211,60 @@
     }
 
     .stat-card {
-      background: #f7fbfd;
-      border: 1px solid #e2eef4;
-      border-radius: 18px;
+      background: linear-gradient(180deg, #fcfeff, #f7fbfd);
+      border: 1px solid var(--border);
+      border-radius: 22px;
       padding: 18px;
     }
 
     .stat-card h3 {
-      color: #0b4f6c;
-      font-size: 14px;
+      color: #5a7382;
+      font-size: 13px;
       margin-bottom: 8px;
     }
 
     .stat-card strong {
-      font-size: 28px;
-      color: #123;
+      display: block;
+      font-size: 30px;
+      color: var(--text);
     }
 
     .good {
-      color: #16753b !important;
+      color: var(--success) !important;
     }
 
     .bad {
-      color: #b42318 !important;
+      color: var(--danger) !important;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 1.1fr 1.3fr;
+      grid-template-columns: 1.15fr 1fr;
       gap: 18px;
       margin-bottom: 18px;
     }
 
     .card {
-      padding: 20px;
+      padding: 24px;
     }
 
     .card h2 {
-      color: #0b4f6c;
-      font-size: 22px;
-      margin-bottom: 14px;
+      color: var(--primary);
+      font-size: 23px;
+      margin-bottom: 10px;
     }
 
-    .muted {
-      color: #6d8592;
-      font-size: 13px;
+    .card-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.9;
     }
 
+    .manual-booking-form,
     .finance-form {
       display: grid;
       gap: 12px;
-    }
-
-    .finance-form input,
-    .finance-form select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d5e6ee;
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-      background: #fbfdff;
-    }
-
-    .finance-form input:focus,
-    .finance-form select:focus {
-      border-color: #118ab2;
-      box-shadow: 0 0 0 4px rgba(17, 138, 178, 0.12);
     }
 
     .row-2 {
@@ -196,37 +277,38 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 18px;
+      margin-top: 6px;
     }
 
     .primary {
-      background: #118ab2;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: white;
-      padding: 11px 16px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 18px rgba(14,94,121,0.14);
     }
 
     .danger {
-      background: #d9534f;
+      background: linear-gradient(135deg, #be4747, #d95c5c);
       color: white;
-      padding: 11px 16px;
+      padding: 12px 16px;
     }
 
     .success {
-      background: #28a745;
+      background: linear-gradient(135deg, #1e824e, #27a565);
       color: white;
-      padding: 11px 16px;
+      padding: 12px 16px;
     }
 
     .warning {
-      background: #f0ad4e;
+      background: linear-gradient(135deg, #d59824, #eeb341);
       color: white;
-      padding: 11px 16px;
+      padding: 12px 16px;
     }
 
     .secondary {
-      background: #eef7fb;
-      color: #0b4f6c;
-      padding: 11px 16px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 12px 16px;
     }
 
     .disabled-btn {
@@ -243,103 +325,129 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1200px;
+      min-width: 1080px;
     }
 
     th, td {
       padding: 14px;
-      border-bottom: 1px solid #e7eff4;
+      border-bottom: 1px solid var(--border);
       text-align: right;
       vertical-align: top;
       font-size: 14px;
     }
 
     th {
-      background: #eef7fb;
-      color: #0b4f6c;
+      background: #f3f9fc;
+      color: var(--primary);
       position: sticky;
       top: 0;
+      font-size: 13px;
+    }
+
+    tr:hover td {
+      background: #fbfdff;
     }
 
     .status {
-      padding: 6px 10px;
+      padding: 6px 11px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       display: inline-block;
     }
 
     .new {
-      background: #fff3cd;
-      color: #8a6d3b;
+      background: #fff4d7;
+      color: #956c1c;
     }
 
     .confirmed {
-      background: #d4edda;
-      color: #155724;
+      background: #e7f8eb;
+      color: #1e7c45;
     }
 
     .done {
-      background: #d1ecf1;
-      color: #0c5460;
+      background: #e8f5fb;
+      color: #17697e;
     }
 
     .reward-badge {
       display: inline-block;
       padding: 6px 10px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      background: #ffe8a3;
-      color: #7a5600;
+      background: var(--warning-soft);
+      color: var(--warning);
     }
 
-    .pill-income {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eafaf0;
-      color: #16753b;
-      font-weight: bold;
-      font-size: 13px;
-    }
-
+    .pill-income,
     .pill-expense {
       display: inline-block;
       padding: 6px 10px;
       border-radius: 999px;
-      background: #fdeaea;
-      color: #b42318;
       font-weight: bold;
-      font-size: 13px;
+      font-size: 12px;
+    }
+
+    .pill-income {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .pill-expense {
+      background: var(--danger-soft);
+      color: var(--danger);
     }
 
     .small-btn {
       padding: 8px 10px;
-      font-size: 13px;
+      font-size: 12px;
       margin-left: 6px;
       margin-bottom: 6px;
+      border-radius: 12px;
     }
 
     .empty {
       padding: 30px;
       text-align: center;
-      color: #5c7380;
+      color: var(--muted);
       font-size: 16px;
     }
 
     .notice {
-      margin-top: 10px;
-      background: #eef7fb;
-      border: 1px solid #d6eaf5;
-      color: #0b4f6c;
-      padding: 12px;
-      border-radius: 12px;
+      margin-top: 12px;
+      background: linear-gradient(180deg, #f7fbfd, #eef7fb);
+      border: 1px solid #dbeaf1;
+      color: #4b6c7c;
+      padding: 14px;
+      border-radius: 16px;
       font-size: 14px;
+      line-height: 1.9;
     }
 
-    @media (max-width: 960px) {
+    .success-box {
+      display: none;
+      margin-top: 12px;
+      background: var(--success-soft);
+      border: 1px solid #bde2ca;
+      color: var(--success);
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .muted-cell {
+      color: #91a5b0;
+    }
+
+    @media (max-width: 1100px) {
       .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .row-2 {
         grid-template-columns: 1fr;
       }
     }
@@ -348,8 +456,9 @@
 <body>
 
   <div class="login-box" id="loginBox">
-    <h2>🔐 دخول لوحة الإدارة</h2>
-    <p>ادخل كلمة المرور للوصول إلى حجوزات الكابتن أبو عبدالله</p>
+    <div class="login-icon">⚓</div>
+    <h2>دخول لوحة الإدارة</h2>
+    <p>لوحة خاصة لإدارة حجوزات الكابتن  شريف ومتابعة الأرباح والمصاريف.</p>
     <input type="password" id="passwordInput" placeholder="كلمة المرور">
     <button onclick="checkPassword()">دخول</button>
     <div class="error-msg" id="errorMsg">❌ كلمة المرور غير صحيحة</div>
@@ -357,8 +466,8 @@
 
   <div id="dashboard">
     <div class="header">
-      <h1>لوحة إدارة الكابتن أبو عبدالله</h1>
-      <p>الحجوزات • النقاط • المدخول • المصروف • صافي الربح</p>
+      <h1>لوحة إدارة الكابتن شريف</h1>
+      <p>متابعة الحجوزات، النقاط، المدخول، المصروف، </p>
     </div>
 
     <div class="stats-grid">
@@ -394,7 +503,46 @@
 
     <div class="layout">
       <div class="card">
+        <h2>حجز يدوي من الإدارة</h2>
+        <div class="card-sub">
+          <strong>مكتمل</strong> ينحسب المدخول تلقائيًا.
+        </div>
+
+        <div class="manual-booking-form">
+          <div class="row-2">
+            <input type="text" id="manualName" placeholder="اسم العميل">
+            <input type="tel" id="manualPhone" placeholder="رقم الجوال (اختياري)">
+          </div>
+
+          <select id="manualTripType">
+            <option value="">اختر فئة الجولة</option>
+            <option value="جولة صغيرة">جولة صغيرة - 100 ريال</option>
+            <option value="جولة كبيرة">جولة كبيرة - 200 ريال</option>
+            <option value="نصف ساعة">نصف ساعة - 350 ريال</option>
+            <option value="ساعة">ساعة - 600 ريال</option>
+            <option value="بكج الترفيه لمدة ساعة">بكج الترفيه لمدة ساعة - 1000 ريال</option>
+          </select>
+
+          <textarea id="manualNotes" rows="3" placeholder="ملاحظات إضافية"></textarea>
+
+          <div class="row-2">
+            <select id="manualStatus">
+              <option value="جديد">جديد</option>
+              <option value="تم التأكيد">تم التأكيد</option>
+              <option value="مكتمل">مكتمل</option>
+            </select>
+
+            <button class="primary" onclick="addManualBooking()">حفظ الحجز اليدوي</button>
+          </div>
+        </div>
+
+        <div class="success-box" id="manualBookingMsg"></div>
+      </div>
+
+      <div class="card">
         <h2>إدارة الأموال</h2>
+        <div class="card-sub">
+        </div>
 
         <div class="finance-form">
           <div class="row-2">
@@ -411,7 +559,7 @@
         </div>
 
         <div class="notice">
-          المدخول التلقائي ينحسب فقط من الحجوزات التي تغيّرت حالتها إلى <strong>مكتمل</strong>، حسب الأسعار التالية:
+          المدخول التلقائي للحجوزات المكتملة:
           <br>جولة صغيرة: 100 ريال
           <br>جولة كبيرة: 200 ريال
           <br>نصف ساعة: 350 ريال
@@ -419,15 +567,15 @@
           <br>بكج الترفيه لمدة ساعة: 1000 ريال
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <h2>إجراءات سريعة</h2>
-        <div class="actions">
-          <button class="primary" onclick="renderAll()">تحديث كل شيء</button>
-          <button class="secondary" onclick="refreshBookingsOnly()">تحديث الحجوزات فقط</button>
-          <button class="danger" onclick="clearAllBookings()">حذف جميع الحجوزات</button>
-          <button class="danger" onclick="clearAllFinance()">حذف جميع الحركات المالية</button>
-        </div>
+    <div class="card" style="margin-bottom: 18px;">
+      <h2>إجراءات سريعة</h2>
+      <div class="actions">
+        <button class="primary" onclick="renderAll()">تحديث كل شيء</button>
+        <button class="secondary" onclick="refreshBookingsOnly()">تحديث الحجوزات فقط</button>
+        <button class="danger" onclick="clearAllBookings()">حذف جميع الحجوزات</button>
+        <button class="danger" onclick="clearAllFinance()">حذف جميع الحركات المالية</button>
       </div>
     </div>
 
@@ -438,8 +586,6 @@
             <th>الاسم</th>
             <th>رقم الجوال</th>
             <th>الرحلة</th>
-            <th>التاريخ</th>
-            <th>الوقت</th>
             <th>الملاحظات</th>
             <th>الحالة</th>
             <th>نقاط العميل</th>
@@ -523,6 +669,7 @@
     }
 
     function getCustomerPoints(bookings, phone) {
+      if (!phone) return 0;
       let points = 0;
       bookings.forEach(booking => {
         if (booking.phone === phone) {
@@ -533,7 +680,7 @@
     }
 
     function getRewardEligibleCustomers(bookings) {
-      const phones = [...new Set(bookings.map(b => b.phone))];
+      const phones = [...new Set(bookings.map(b => b.phone).filter(Boolean))];
       return phones.filter(phone => getCustomerPoints(bookings, phone) >= 3).length;
     }
 
@@ -563,6 +710,57 @@
       }
     });
 
+    async function addManualBooking() {
+      const name = document.getElementById("manualName").value.trim();
+      const phone = document.getElementById("manualPhone").value.trim();
+      const tripType = document.getElementById("manualTripType").value;
+      const notes = document.getElementById("manualNotes").value.trim();
+      const status = document.getElementById("manualStatus").value;
+      const msg = document.getElementById("manualBookingMsg");
+
+      if (!name || !tripType) {
+        msg.style.display = "block";
+        msg.style.background = "#fff1f1";
+        msg.style.border = "1px solid #f1caca";
+        msg.style.color = "#b42318";
+        msg.textContent = "❌ فضلاً عبّ الاسم وفئة الجولة";
+        return;
+      }
+
+      const isCompleted = status === "مكتمل";
+      const autoIncome = isCompleted ? getTripPrice(tripType) : 0;
+      const points = isCompleted && phone ? 1 : 0;
+
+      await addDoc(collection(db, "bookings"), {
+        name,
+        phone: phone || "",
+        tripType,
+        duration: tripType,
+        date: "",
+        time: "",
+        notes,
+        status,
+        points,
+        incomeAdded: isCompleted,
+        autoIncome,
+        createdAt: new Date().toISOString()
+      });
+
+      document.getElementById("manualName").value = "";
+      document.getElementById("manualPhone").value = "";
+      document.getElementById("manualTripType").value = "";
+      document.getElementById("manualNotes").value = "";
+      document.getElementById("manualStatus").value = "جديد";
+
+      msg.style.display = "block";
+      msg.style.background = "#eafaf0";
+      msg.style.border = "1px solid #bde2ca";
+      msg.style.color = "#16753b";
+      msg.textContent = "✅ تم حفظ الحجز اليدوي بنجاح";
+
+      renderAll();
+    }
+
     async function updateStatus(id, newStatus) {
       const bookings = await getBookingsRaw();
       const booking = bookings.find(b => b.id === id);
@@ -571,8 +769,9 @@
       const updates = { status: newStatus };
 
       if (booking.status !== "مكتمل" && newStatus === "مكتمل") {
-        updates.points = (booking.points || 0) + 1;
-
+        if (booking.phone) {
+          updates.points = (booking.points || 0) + 1;
+        }
         if (!booking.incomeAdded) {
           updates.incomeAdded = true;
           updates.autoIncome = getTripPrice(booking.tripType);
@@ -584,6 +783,11 @@
     }
 
     async function useReward(phone) {
+      if (!phone) {
+        alert("❌ هذا الحجز بدون رقم جوال");
+        return;
+      }
+
       const bookings = await getBookingsRaw();
       const currentPoints = getCustomerPoints(bookings, phone);
 
@@ -594,8 +798,9 @@
 
       let remaining = 3;
 
-      const sameCustomer = bookings
-        .filter(booking => booking.phone === phone && (booking.points || 0) > 0);
+      const sameCustomer = bookings.filter(
+        booking => booking.phone === phone && (booking.points || 0) > 0
+      );
 
       for (const booking of sameCustomer) {
         if (remaining <= 0) break;
@@ -702,7 +907,7 @@
       if (!bookings.length) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="11">
+            <td colspan="9">
               <div class="empty">لا توجد حجوزات حتى الآن.</div>
             </td>
           </tr>
@@ -712,7 +917,7 @@
 
       const rows = [...bookings].reverse().map(booking => {
         const customerPoints = getCustomerPoints(bookings, booking.phone);
-        const hasReward = customerPoints >= 3;
+        const hasReward = booking.phone && customerPoints >= 3;
         const bookingIncome = booking.status === "مكتمل"
           ? (typeof booking.autoIncome === "number" ? booking.autoIncome : getTripPrice(booking.tripType))
           : 0;
@@ -720,15 +925,13 @@
         return `
           <tr>
             <td>${booking.name || "-"}</td>
-            <td>${booking.phone || "-"}</td>
+            <td>${booking.phone || '<span class="muted-cell">بدون رقم</span>'}</td>
             <td>${booking.tripType || "-"}</td>
-            <td>${booking.date || "-"}</td>
-            <td>${booking.time || "-"}</td>
             <td>${booking.notes || "لا يوجد"}</td>
             <td><span class="status ${statusClass(booking.status)}">${booking.status || "جديد"}</span></td>
-            <td>${customerPoints} نقطة</td>
+            <td>${booking.phone ? `${customerPoints} نقطة` : '<span class="muted-cell">—</span>'}</td>
             <td>
-              ${hasReward ? '<span class="reward-badge">🎁 مستحق رحلة مجانية</span>' : '<span class="muted">غير مستحق بعد</span>'}
+              ${hasReward ? '<span class="reward-badge">🎁 مستحق رحلة مجانية</span>' : '<span class="muted">غير متاح</span>'}
             </td>
             <td>
               ${bookingIncome > 0 ? `<span class="pill-income">+${bookingIncome} ريال</span>` : '<span class="muted">لم يحتسب بعد</span>'}
@@ -800,6 +1003,7 @@
 
     window.renderAll = renderAll;
     window.refreshBookingsOnly = refreshBookingsOnly;
+    window.addManualBooking = addManualBooking;
     window.updateStatus = updateStatus;
     window.useReward = useReward;
     window.deleteBookingItem = deleteBookingItem;
