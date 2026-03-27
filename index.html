@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الكابتن  شريف</title>
+  <title>الكابتن أبو عبدالله</title>
   <style>
     * {
       box-sizing: border-box;
@@ -186,6 +186,13 @@
     .submit-btn:hover {
       transform: translateY(-1px);
       box-shadow: 0 12px 20px rgba(17, 138, 178, 0.2);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     .secondary-btn {
@@ -389,7 +396,7 @@
 <body>
 
   <header>
-    <h1>🚤 الكابتن شريف</h1>
+    <h1>🚤 الكابتن أبو عبدالله</h1>
     <p>رحلات بحرية مميزة للنزهة والصيد بأجواء ممتعة وخدمة موثوقة</p>
     <div class="hero-badge">حجز سريع • أسعار واضحة • أوقات مرنة</div>
   </header>
@@ -519,7 +526,7 @@
           </div>
         </div>
 
-        <button class="submit-btn" type="submit">تأكيد الحجز</button>
+        <button class="submit-btn" id="submitBookingBtn" type="submit">تأكيد الحجز</button>
         <div class="success-msg" id="successMsg"></div>
       </form>
     </div>
@@ -537,7 +544,7 @@
 
   <div class="chat-widget" id="chatWidget">
     <div class="chat-header">
-    مساعد الكابتن شريف
+      مساعد الكابتن أبو عبدالله
       <div class="chat-sub">اسأل عن الأسعار أو الأوقات أو طريقة الحجز</div>
     </div>
     <div class="chat-box" id="chatBox">
@@ -573,6 +580,9 @@
     const bookingForm = document.getElementById("bookingForm");
     const successMsg = document.getElementById("successMsg");
     const savedPhoneBox = document.getElementById("savedPhoneBox");
+    const submitBookingBtn = document.getElementById("submitBookingBtn");
+
+    let isSubmittingBooking = false;
 
     function showSavedPhone() {
       const savedPhone = localStorage.getItem("userPhone");
@@ -584,6 +594,12 @@
         savedPhoneBox.style.display = "none";
         savedPhoneBox.innerHTML = "";
       }
+    }
+
+    function setSubmitButtonState(loading) {
+      isSubmittingBooking = loading;
+      submitBookingBtn.disabled = loading;
+      submitBookingBtn.textContent = loading ? "جاري إرسال الحجز..." : "تأكيد الحجز";
     }
 
     window.saveUserPhone = function () {
@@ -615,6 +631,8 @@
     bookingForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
+      if (isSubmittingBooking) return;
+
       const userPhone = localStorage.getItem("userPhone");
 
       if (!userPhone) {
@@ -626,6 +644,8 @@
         return;
       }
 
+      setSubmitButtonState(true);
+
       const newBooking = {
         name: document.getElementById("name").value.trim(),
         phone: userPhone,
@@ -636,16 +656,20 @@
         notes: document.getElementById("notes").value.trim(),
         status: "جديد",
         points: 0,
+        incomeAdded: false,
+        autoIncome: 0,
         createdAt: new Date().toISOString()
       };
 
       try {
         await addDoc(collection(db, "bookings"), newBooking);
+
         successMsg.style.display = "block";
         successMsg.style.background = "#eafaf0";
         successMsg.style.color = "#16753b";
         successMsg.style.border = "1px solid #bde2ca";
         successMsg.textContent = "✅ تم إرسال الحجز بنجاح";
+
         bookingForm.reset();
       } catch (error) {
         console.error(error);
@@ -654,6 +678,8 @@
         successMsg.style.color = "#b42318";
         successMsg.style.border = "1px solid #f5c2c7";
         successMsg.textContent = "❌ حدث خطأ أثناء إرسال الحجز";
+      } finally {
+        setSubmitButtonState(false);
       }
     });
 
