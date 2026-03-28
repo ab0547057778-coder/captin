@@ -1,86 +1,44 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ reply: "Method not allowed" });
-  }
-
   try {
-    const { message } = req.body || {};
-
-    if (!message || !message.trim()) {
-      return res.status(400).json({ reply: "الرسالة فارغة" });
-    }
-
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ reply: "المفتاح غير موجود في Vercel" });
-    }
-
-    const systemPrompt = `
-أنت "مساعد الكابتن شريف".
-وظيفتك: خدمة عملاء + مبيعات + مساعد حجز احترافي جدًا لموقع رحلات بحرية.
-
-شخصيتك:
-- تتكلم بالعربية وبأسلوب سعودي راقٍ وطبيعي
-- ودود واحترافي ومقنع
-- مختصر وواضح
-- هدفك الأساسي: تحويل الزائر إلى عميل يحجز
-
-معلومات المشروع:
-- جولة صغيرة: 100 ريال
-- جولة كبيرة: 200 ريال
-- نصف ساعة: 350 ريال
-- ساعة: 600 ريال
-- بكج الترفيه لمدة ساعة: 1000 ريال
-- بكج الترفيه يشمل الجيتسكي والبنانا بوت
-- نقطة الانطلاق يتم تحديدها بعد مراجعة الحجز والتواصل مع العميل
-- الحجز متاح حسب الأوقات المتوفرة خلال اليوم
-- كل 3 نقاط يحصل العميل على رحلة مجانية
-- الحجز يتم عبر نموذج الحجز الموجود في الموقع
-
-قواعد مهمة:
-- لا تخترع معلومات غير موجودة
-- إذا سأل عن السعر، جاوبه بوضوح
-- إذا سأل عن البكج، أكد أنه يشمل الجيتسكي والبنانا بوت
-- إذا كان جاهز للحجز، وجهه لحفظ رقم الجوال وتعبئة نموذج الحجز
-- إذا كان متردد، رشح له الأنسب حسب احتياجه
-`;
+    const userMessage = req.body?.message;
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://captin-zeta.vercel.app",
-        "X-Title": "Captain Sharif Website"
+        "HTTP-Referer": "https://your-site.vercel.app",
+        "X-Title": "Captain Sharif Bot"
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",
         messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: message }
-        ],
-        temperature: 0.8,
-        max_tokens: 300
+          {
+            role: "system",
+            content: "أنت مساعد تسويقي احترافي جدًا، ترد بالعربية بشكل ذكي وواضح ومقنع."
+          },
+          {
+            role: "user",
+            content: userMessage
+          }
+        ]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("OpenRouter error:", data);
-      return res.status(500).json({
-        reply: `خطأ من OpenRouter: ${data?.error?.message || "غير معروف"}`
+      return res.status(response.status).json({
+        error: data
       });
     }
 
-    const reply =
-      data?.choices?.[0]?.message?.content?.trim() ||
-      "حياك الله، ما قدرت أطلع الرد الآن. حاول مرة ثانية.";
+    const reply = data?.choices?.[0]?.message?.content || "ما وصل رد من النموذج";
 
     return res.status(200).json({ reply });
   } catch (error) {
-    console.error("Server error:", error);
     return res.status(500).json({
-      reply: `خطأ في السيرفر: ${error.message}`
+      error: error.message || "صار خطأ داخلي"
     });
   }
 }
