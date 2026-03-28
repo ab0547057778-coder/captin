@@ -857,242 +857,254 @@
   </div>
 
   <footer>
-    جميع الحقوق محفوظة © ا Abdullah programer
+    جميع الحقوق محفوظة © الكابتن شريف
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBIrEMz-ctTVb4ZFARdA7NQywWEbJ9ZrjE",
-      authDomain: "captain-site-16f2d.firebaseapp.com",
-      projectId: "captain-site-16f2d",
-      storageBucket: "captain-site-16f2d.firebasestorage.app",
-      messagingSenderId: "950382729411",
-      appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
-      measurementId: "G-4K0RXH2W61"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyBIrEMz-ctTVb4ZFARdA7NQywWEbJ9ZrjE",
+    authDomain: "captain-site-16f2d.firebaseapp.com",
+    projectId: "captain-site-16f2d",
+    storageBucket: "captain-site-16f2d.firebasestorage.app",
+    messagingSenderId: "950382729411",
+    appId: "1:950382729411:web:3b3d4cdef531718a71aa76",
+    measurementId: "G-4K0RXH2W61"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    const bookingForm = document.getElementById("bookingForm");
-    const successMsg = document.getElementById("successMsg");
-    const savedPhoneBox = document.getElementById("savedPhoneBox");
-    const submitBookingBtn = document.getElementById("submitBookingBtn");
+  const bookingForm = document.getElementById("bookingForm");
+  const successMsg = document.getElementById("successMsg");
+  const savedPhoneBox = document.getElementById("savedPhoneBox");
+  const submitBookingBtn = document.getElementById("submitBookingBtn");
 
-    let isSubmittingBooking = false;
+  let isSubmittingBooking = false;
 
-    function showSavedPhone() {
-      const savedPhone = localStorage.getItem("userPhone");
-
-      if (savedPhone) {
-        savedPhoneBox.style.display = "block";
-        savedPhoneBox.innerHTML = `✅ الرقم المحفوظ: ${savedPhone}`;
-      } else {
-        savedPhoneBox.style.display = "none";
-        savedPhoneBox.innerHTML = "";
-      }
-    }
-
-    function setSubmitButtonState(loading) {
-      isSubmittingBooking = loading;
-      submitBookingBtn.disabled = loading;
-      submitBookingBtn.textContent = loading ? "جاري إرسال الحجز..." : "تأكيد الحجز";
-    }
-
-    function setMessageState(el, type, text) {
-      el.style.display = "block";
-      el.style.background = "";
-      el.style.color = "";
-      el.style.border = "";
-
-      if (type === "success") {
-        el.style.background = "var(--success-bg)";
-        el.style.color = "var(--success-text)";
-        el.style.border = "1px solid #bde2ca";
-      } else if (type === "warning") {
-        el.style.background = "var(--warning-bg)";
-        el.style.color = "var(--warning-text)";
-        el.style.border = "1px solid #ffe69c";
-      } else {
-        el.style.background = "var(--error-bg)";
-        el.style.color = "var(--error-text)";
-        el.style.border = "1px solid #f5c2c7";
-      }
-
-      el.textContent = text;
-    }
-
-    window.saveUserPhone = function () {
-      const phone = document.getElementById("userPhone").value.trim();
-
-      if (!phone) {
-        alert("فضلاً أدخل رقم الجوال");
-        return;
-      }
-
-      localStorage.setItem("userPhone", phone);
-      showSavedPhone();
-      alert("✅ تم حفظ رقم الجوال بنجاح");
-    };
-
-    window.clearSavedPhone = function () {
-      localStorage.removeItem("userPhone");
-      document.getElementById("userPhone").value = "";
-      showSavedPhone();
-      alert("تم حذف الرقم المحفوظ");
-    };
-
+  function showSavedPhone() {
     const savedPhone = localStorage.getItem("userPhone");
+
     if (savedPhone) {
-      document.getElementById("userPhone").value = savedPhone;
+      savedPhoneBox.style.display = "block";
+      savedPhoneBox.innerHTML = `✅ الرقم المحفوظ: ${savedPhone}`;
+    } else {
+      savedPhoneBox.style.display = "none";
+      savedPhoneBox.innerHTML = "";
     }
+  }
+
+  function setSubmitButtonState(loading) {
+    isSubmittingBooking = loading;
+    submitBookingBtn.disabled = loading;
+    submitBookingBtn.textContent = loading ? "جاري إرسال الحجز..." : "تأكيد الحجز";
+  }
+
+  function setMessageState(el, type, text) {
+    el.style.display = "block";
+    el.style.background = "";
+    el.style.color = "";
+    el.style.border = "";
+
+    if (type === "success") {
+      el.style.background = "var(--success-bg)";
+      el.style.color = "var(--success-text)";
+      el.style.border = "1px solid #bde2ca";
+    } else if (type === "warning") {
+      el.style.background = "var(--warning-bg)";
+      el.style.color = "var(--warning-text)";
+      el.style.border = "1px solid #ffe69c";
+    } else {
+      el.style.background = "var(--error-bg)";
+      el.style.color = "var(--error-text)";
+      el.style.border = "1px solid #f5c2c7";
+    }
+
+    el.textContent = text;
+  }
+
+  window.saveUserPhone = function () {
+    const phone = document.getElementById("userPhone").value.trim();
+
+    if (!phone) {
+      alert("فضلاً أدخل رقم الجوال");
+      return;
+    }
+
+    localStorage.setItem("userPhone", phone);
     showSavedPhone();
+    alert("✅ تم حفظ رقم الجوال بنجاح");
+  };
 
-    bookingForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
+  window.clearSavedPhone = function () {
+    localStorage.removeItem("userPhone");
+    document.getElementById("userPhone").value = "";
+    showSavedPhone();
+    alert("تم حذف الرقم المحفوظ");
+  };
 
-      if (isSubmittingBooking) return;
+  const savedPhone = localStorage.getItem("userPhone");
+  if (savedPhone) {
+    document.getElementById("userPhone").value = savedPhone;
+  }
+  showSavedPhone();
 
-      const userPhone = localStorage.getItem("userPhone");
+  bookingForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      if (!userPhone) {
-        setMessageState(successMsg, "warning", "⚠️ فضلاً احفظ رقم الجوال أولاً قبل الحجز");
-        return;
-      }
+    if (isSubmittingBooking) return;
 
-      setSubmitButtonState(true);
+    const userPhone = localStorage.getItem("userPhone");
 
-      const newBooking = {
-        name: document.getElementById("name").value.trim(),
-        phone: userPhone,
-        tripType: document.getElementById("tripType").value,
-        duration: document.getElementById("tripType").value,
-        date: document.getElementById("date").value,
-        time: document.getElementById("time").value,
-        notes: document.getElementById("notes").value.trim(),
-        status: "جديد",
-        points: 0,
-        incomeAdded: false,
-        autoIncome: 0,
-        createdAt: new Date().toISOString()
-      };
+    if (!userPhone) {
+      setMessageState(successMsg, "warning", "⚠️ فضلاً احفظ رقم الجوال أولاً قبل الحجز");
+      return;
+    }
 
-      try {
-        await addDoc(collection(db, "bookings"), newBooking);
-        setMessageState(successMsg, "success", "✅ تم إرسال الحجز بنجاح");
-        bookingForm.reset();
-      } catch (error) {
-        console.error(error);
-        setMessageState(successMsg, "error", "❌ حدث خطأ أثناء إرسال الحجز");
-      } finally {
-        setSubmitButtonState(false);
-      }
-    });
+    setSubmitButtonState(true);
 
-    window.checkCustomerPoints = async function () {
-      const loyaltyResult = document.getElementById("loyaltyResult");
-      const phone = localStorage.getItem("userPhone");
+    const newBooking = {
+      name: document.getElementById("name").value.trim(),
+      phone: userPhone,
+      tripType: document.getElementById("tripType").value,
+      duration: document.getElementById("tripType").value,
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      notes: document.getElementById("notes").value.trim(),
+      status: "جديد",
+      points: 0,
+      incomeAdded: false,
+      autoIncome: 0,
+      createdAt: new Date().toISOString()
+    };
 
-      if (!phone) {
-        setMessageState(loyaltyResult, "warning", "⚠️ فضلاً احفظ رقم الجوال أولاً");
-        return;
-      }
+    try {
+      await addDoc(collection(db, "bookings"), newBooking);
+      setMessageState(successMsg, "success", "✅ تم إرسال الحجز بنجاح");
+      bookingForm.reset();
+    } catch (error) {
+      console.error(error);
+      setMessageState(successMsg, "error", "❌ حدث خطأ أثناء إرسال الحجز");
+    } finally {
+      setSubmitButtonState(false);
+    }
+  });
 
-      try {
-        const snapshot = await getDocs(collection(db, "bookings"));
-        let points = 0;
+  window.checkCustomerPoints = async function () {
+    const loyaltyResult = document.getElementById("loyaltyResult");
+    const phone = localStorage.getItem("userPhone");
 
-        snapshot.forEach((doc) => {
-          const booking = doc.data();
-          if (booking.phone === phone) {
-            points += booking.points || 0;
-          }
-        });
+    if (!phone) {
+      setMessageState(loyaltyResult, "warning", "⚠️ فضلاً احفظ رقم الجوال أولاً");
+      return;
+    }
 
-        if (points >= 3) {
-          setMessageState(loyaltyResult, "success", `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`);
-        } else if (points > 0) {
-          loyaltyResult.style.display = "block";
-          loyaltyResult.style.background = "#eef7fb";
-          loyaltyResult.style.color = "#0b4f6c";
-          loyaltyResult.style.border = "1px solid #d6eaf5";
-          loyaltyResult.textContent = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
-        } else {
-          loyaltyResult.style.display = "block";
-          loyaltyResult.style.background = "#f8f9fa";
-          loyaltyResult.style.color = "#5c7380";
-          loyaltyResult.style.border = "1px solid #dde5ea";
-          loyaltyResult.textContent = "لا توجد نقاط مسجلة لهذا الرقم حاليًا.";
+    try {
+      const snapshot = await getDocs(collection(db, "bookings"));
+      let points = 0;
+
+      snapshot.forEach((doc) => {
+        const booking = doc.data();
+        if (booking.phone === phone) {
+          points += booking.points || 0;
         }
-      } catch (error) {
-        console.error(error);
-        setMessageState(loyaltyResult, "error", "❌ تعذر جلب النقاط حالياً");
-      }
-    };
+      });
 
-    function addMessage(text, sender) {
-      const chatBox = document.getElementById("chatBox");
-      const message = document.createElement("div");
-      message.className = `msg ${sender}`;
-      message.textContent = text;
-      chatBox.appendChild(message);
-      chatBox.scrollTop = chatBox.scrollHeight;
+      if (points >= 3) {
+        setMessageState(loyaltyResult, "success", `🎉 لديك ${points} نقاط، وأنت مستحق رحلة مجانية!`);
+      } else if (points > 0) {
+        loyaltyResult.style.display = "block";
+        loyaltyResult.style.background = "#eef7fb";
+        loyaltyResult.style.color = "#0b4f6c";
+        loyaltyResult.style.border = "1px solid #d6eaf5";
+        loyaltyResult.textContent = `⭐ لديك ${points} نقاط. عند الوصول إلى 3 نقاط تحصل على رحلة مجانية.`;
+      } else {
+        loyaltyResult.style.display = "block";
+        loyaltyResult.style.background = "#f8f9fa";
+        loyaltyResult.style.color = "#5c7380";
+        loyaltyResult.style.border = "1px solid #dde5ea";
+        loyaltyResult.textContent = "لا توجد نقاط مسجلة لهذا الرقم حاليًا.";
+      }
+    } catch (error) {
+      console.error(error);
+      setMessageState(loyaltyResult, "error", "❌ تعذر جلب النقاط حالياً");
+    }
+  };
+
+  function addMessage(text, sender) {
+    const chatBox = document.getElementById("chatBox");
+    const message = document.createElement("div");
+    message.className = `msg ${sender}`;
+    message.textContent = text;
+    chatBox.appendChild(message);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function getBotReply(message) {
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("API ERROR:", data);
+        return data?.error || "ما قدرت أرد الآن، حاول مرة ثانية.";
+      }
+
+      if (!data?.reply) {
+        console.error("INVALID API RESPONSE:", data);
+        return "ما وصل رد صحيح من البوت، حاول مرة ثانية.";
+      }
+
+      return data.reply;
+    } catch (err) {
+      console.error("FETCH ERROR:", err);
+      return "صار خطأ مؤقت في المساعد، حاول مرة ثانية.";
+    }
+  }
+
+  window.toggleChat = function () {
+    const chat = document.getElementById("chatWidget");
+    chat.style.display = chat.style.display === "block" ? "none" : "block";
+  };
+
+  window.sendMessage = async function () {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    addMessage("...جاري التفكير", "bot");
+
+    const chatBox = document.getElementById("chatBox");
+    const loadingMsg = chatBox.lastElementChild;
+
+    const reply = await getBotReply(text);
+
+    if (loadingMsg) {
+      loadingMsg.remove();
     }
 
-    async function getBotReply(message) {
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message })
-        });
+    addMessage(reply, "bot");
+  };
 
-        const data = await res.json();
-        return data.reply || "ما قدرت أرد الآن، حاول مرة ثانية.";
-      } catch (err) {
-        return "صار خطأ مؤقت في المساعد، حاول مرة ثانية.";
-      }
+  document.getElementById("chatInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      window.sendMessage();
     }
-
-    window.toggleChat = function () {
-      const chat = document.getElementById("chatWidget");
-      chat.style.display = chat.style.display === "block" ? "none" : "block";
-    };
-
-    window.sendMessage = async function () {
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-
-      if (!text) return;
-
-      addMessage(text, "user");
-      input.value = "";
-
-      addMessage("...جاري التفكير", "bot");
-
-      const chatBox = document.getElementById("chatBox");
-      const loadingMsg = chatBox.lastElementChild;
-
-      const reply = await getBotReply(text);
-
-      if (loadingMsg) {
-        loadingMsg.remove();
-      }
-
-      addMessage(reply, "bot");
-    };
-
-    document.getElementById("chatInput").addEventListener("keypress", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-  </script>
+  });
+</script> </script>
 </body>
 </html>
